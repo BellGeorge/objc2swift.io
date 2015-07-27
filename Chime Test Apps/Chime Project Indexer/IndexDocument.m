@@ -461,7 +461,7 @@ static NSMutableArray *argumentsFromSingleString(NSString *singleString) {
                         [arguments removeObjectsInRange:NSMakeRange([arguments count] - 4, 4)];
                         
                         BOOL useClangParser = NO;
-                        if(useClangParser){
+                        if(!useClangParser){
                             
                             //BEGIN Regex pattern matching  / ruby hack method in combitation with SourceCodeKit attributed string conversion
                             SCKSourceFile *implementation = [sourceCollection sourceFileForPath: fileURL.path]; //.m files

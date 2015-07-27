@@ -65,7 +65,7 @@
         if (parsed == NO)
         {
             sourceCollection = [SCKSourceCollection new];
-
+            
             //	[sourceCollection setIgnoresIncludedSymbols: YES];
             //[self parseSourceFilesIntoCollection: sourceCollection];
         }
@@ -99,7 +99,7 @@
 
 //- (SCKClangSourceFile*)parsedFileForName: (NSString*)aFileName
 //{
-//    
+//
 //    NSArray *files = [[self parsingTestFiles] filteredCollectionWithBlock: ^ (id path)
 //    {
 //                          return [[path lastPathComponent] isEqual: aFileName];
@@ -161,12 +161,12 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)controller
 {
     [super windowControllerDidLoadNib:controller];
-
+    
     // Yes, using performSelector is a code smell.
     // But this is the most convenient accessor method for when a document first opens, and if you call it synchronously, the Open panel won't be a sheet on the window, but will open modally, even tough self.window is available.
     [self performSelectorOnMainThread:@selector(handleStage1_choosingProjectOrWorkspaceFileURL) withObject:nil waitUntilDone:NO];
 }
- 
+
 + (BOOL)autosavesInPlace
 {
     return YES;
@@ -212,7 +212,7 @@
                 NSLog(@"User canceled project/workspace choice.");
             } else if (result == NSFileHandlingPanelOKButton) {
                 strongSelf.projectOrWorkspaceFileURL = [openPanel URLs][0];
-
+                
                 [strongSelf handleStage2_determiningSchemesOrProjectTargetsAndConfigurations];
             }
         }
@@ -263,7 +263,7 @@
                     }
                 }
             }
-
+            
             if (error) {
                 // TODO: tell user there was a problem, close document
                 NSLog(@"There was a problem: %@", error);
@@ -272,7 +272,7 @@
             }
         }
     }];
-
+    
 }
 
 // nil result means parsing error.
@@ -282,7 +282,7 @@ static NSArray *namesInStringForTitle(NSString *string, NSString *title) {
     // TODO: Use NSRegularExpression instead of relying on exact number of spaces in output format.
     // There is *FAR* too much exact matching going on here.
     // *HOWEVER*, you can't just trim all whitespace from names before and after, because if a name starts or ends with, say, a space, it is *NOT* put in quotes. You can only tell the whitespace by counting the expected indent spaces and *ONLY* removing those.
-
+    
     NSString *titlePlus = [NSString stringWithFormat:@"\n    %@:\n        ", title];
     
     const NSRange preRange = [string rangeOfString:titlePlus];
@@ -296,7 +296,7 @@ static NSArray *namesInStringForTitle(NSString *string, NSString *title) {
             result = [substring componentsSeparatedByString:@"\n        "];
         }
     }
-
+    
     return result;
 }
 
@@ -310,25 +310,25 @@ static NSArray *namesInStringForTitle(NSString *string, NSString *title) {
                                             configurationNames:self.projectConfigurationNames
                                                    forDocument:self
                                              completionHandler:^(BOOL didChoose, NSString *chosenSchemeName, NSString *chosenTargetName, NSString *chosenConfigurationName) {
-        typeof(self) strongSelf = weakSelf;
-        if (strongSelf != nil) {
-            if (didChoose == NO) {
-                // TODO: close document
-                NSLog(@"User canceled scheme/target+build configuration choice.");
-            } else {
-                strongSelf.chosenSchemeName = chosenSchemeName;
-                strongSelf.chosenProjectTargetName = chosenTargetName;
-                strongSelf.chosenProjectConfigurationName = chosenConfigurationName;
-                
-                [strongSelf handleStage4_determiningCompilationUnitURLS];
-            }
-        }
-    }];
+                                                 typeof(self) strongSelf = weakSelf;
+                                                 if (strongSelf != nil) {
+                                                     if (didChoose == NO) {
+                                                         // TODO: close document
+                                                         NSLog(@"User canceled scheme/target+build configuration choice.");
+                                                     } else {
+                                                         strongSelf.chosenSchemeName = chosenSchemeName;
+                                                         strongSelf.chosenProjectTargetName = chosenTargetName;
+                                                         strongSelf.chosenProjectConfigurationName = chosenConfigurationName;
+                                                         
+                                                         [strongSelf handleStage4_determiningCompilationUnitURLS];
+                                                     }
+                                                 }
+                                             }];
 }
 
 - (NSArray *)standardXcodebuildArguments {
     NSMutableArray *result = [NSMutableArray array];
-
+    
     NSString *fileName = [self.projectOrWorkspaceFileURL lastPathComponent];
     
     if (self.isProject) {
@@ -347,7 +347,7 @@ static NSArray *namesInStringForTitle(NSString *string, NSString *title) {
 }
 
 - (void)handleStage4_determiningCompilationUnitURLS {
-
+    
     // TODO: put up spinner in document while this is going on? Put labels? "Cleaning…", "Building…" "Indexing…". Geeks will like that.
     
     // Clean first so everything will be outputted when we build.
@@ -437,7 +437,7 @@ static NSMutableArray *argumentsFromSingleString(NSString *singleString) {
             } else {
                 // FROM HERE ON, we know how big an area we're dealing with, so we can continue loop even on further failures.
                 location = NSMaxRange(doubleReturnRange);
-
+                
                 const NSRange compileLinesRange = NSMakeRange(compileCRange.location, NSMaxRange(doubleReturnRange) - compileCRange.location);
                 
                 // ASSUMPTION: clang tool file path will end with this. I want to use something more than "clang" because it's possible that that string might be elsewhere in the settings, a file path, for example.
@@ -460,68 +460,61 @@ static NSMutableArray *argumentsFromSingleString(NSString *singleString) {
                         
                         [arguments removeObjectsInRange:NSMakeRange([arguments count] - 4, 4)];
                         
-                        SCKSourceFile *implementation = [sourceCollection sourceFileForPath: fileURL.path]; //.m files
-                        NSMutableString *headerFile = [NSMutableString stringWithFormat:@"%@",fileURL.path];
-                        [headerFile replaceOccurrencesOfString:@".m" withString:@".h" options:0 range:NSMakeRange(0, headerFile.length)];
-                        SCKSourceFile *hFile = [sourceCollection sourceFileForPath: headerFile]; //.h files - may not exist??
-//
-//                    
-    
+                        BOOL useClangParser = NO;
+                        if(useClangParser){
+                            
+                            //BEGIN Regex pattern matching  / ruby hack method in combitation with SourceCodeKit attributed string conversion
+                            SCKSourceFile *implementation = [sourceCollection sourceFileForPath: fileURL.path]; //.m files
+                            NSMutableString *headerFile = [NSMutableString stringWithFormat:@"%@",fileURL.path];
+                            [headerFile replaceOccurrencesOfString:@".m" withString:@".h" options:0 range:NSMakeRange(0, headerFile.length)];
+                            SCKSourceFile *hFile = [sourceCollection sourceFileForPath: headerFile]; //.h files - may not exist??
+                            
+                        }else{
+                            
+                            // Use ChimeTranslationUnit / clang parser
+                            ChimeTranslationUnit *tu = [[ChimeTranslationUnit alloc] initWithFileURL:fileURL arguments:arguments index:self.index];
+                            if (tu == nil) {
+                                // TODO: provide error
+                                NSLog(@"Couldn't create translation unit for file \"%@\"", [fileURL path]);
+                            } else {
+                                [result addObject:tu];
+                            }
+                        }
                         
-//                        SCKClass *classA = [self parsedClassForName: @"A"];
-//                        SCKClass *classB = [self parsedClassForName: @"B"];
-//                        [[[classA declaration] file] lastPathComponent];
                         
-//                        ChimeTranslationUnit *tu = [[ChimeTranslationUnit alloc] initWithFileURL:fileURL arguments:arguments index:self.index];
-//                        if (tu == nil) {
-//                            // TODO: provide error
-//                            NSLog(@"Couldn't create translation unit for file \"%@\"", [fileURL path]);
-//                        } else {
-//                            [result addObject:tu];
-//                        }
                     }
                 }
             }
         }
     }
     
-  //  NSLog(@"sourceCollection:%@",sourceCollection);
-  //  NSLog(@"enumerationValues:%@",sourceCollection.enumerationValues);
-   // NSLog(@"classes:%@",sourceCollection.classes);
+    //  NSLog(@"sourceCollection:%@",sourceCollection);
+    //  NSLog(@"enumerationValues:%@",sourceCollection.enumerationValues);
+    // NSLog(@"classes:%@",sourceCollection.classes);
     //NSLog(@"files:%@",sourceCollection->files);
     //NSLog(@"functions:%@",sourceCollection.functions);
     
-//    [sourceCollection.classes enumerateKeysAndObjectsUsingBlock:^(SCKClass *c, id obj, BOOL *stop) {
-//       NSLog(@"file.fileName:%@",c);
-//        
-//        if ([c isKindOfClass:[SCKClass class]]) {
-//            [c.methods enumerateKeysAndObjectsUsingBlock:^(SCKMethod *m, id obj, BOOL *stop) {
-//                NSLog(@"definition:%@",m.definition);
-//                NSLog(@"declaration:%@",m.declaration);
-//            }];
-//            
-//        }
-//     
-//    }];
+    //    [sourceCollection.classes enumerateKeysAndObjectsUsingBlock:^(SCKClass *c, id obj, BOOL *stop) {
+    //       NSLog(@"file.fileName:%@",c);
+    //
+    //        if ([c isKindOfClass:[SCKClass class]]) {
+    //            [c.methods enumerateKeysAndObjectsUsingBlock:^(SCKMethod *m, id obj, BOOL *stop) {
+    //                NSLog(@"definition:%@",m.definition);
+    //                NSLog(@"declaration:%@",m.declaration);
+    //            }];
+    //
+    //        }
+    //
+    //    }];
     [sourceCollection.files enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCKClangSourceFile *file, BOOL * __nonnull stop) {
         
         if ([file isKindOfClass:[SCKClangSourceFile class]]) {
-
-
+            
             DDFileReader *reader = [[DDFileReader alloc]initWithFilePath:file.fileName];
-            //while ( [reader convertNextLine]) {
-             //   NSLog(@"read line: %@", line);
-           // }
             NSLog(@"file.fileName:%@",file.fileName);
-
             [reader createSwiftFileFrom:file sourceCollection:sourceCollection];
             
-            //initWithClass
-            
-            
         }
-        
-        
     }];
     
     

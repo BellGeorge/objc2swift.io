@@ -6,6 +6,8 @@
 #import "SCKIntrospection.h"
 #include <objc/runtime.h>
 #import <Chime/SCKSourceCollection.h>
+#import <Chime/RegExCategories.h>
+
 
 
 static NSDictionary *noAttributes;
@@ -21,6 +23,7 @@ static NSDictionary *noAttributes;
 -(NSMutableArray*)lines;
 -(void)updateAttributeAtLine:(NSInteger)line attributeString:(NSMutableAttributedString*)attributeString;
 -(void)removeRowAtIndex:(NSUInteger)rowIndex;
+-(NSMutableString*)replaceOccurrencesOfString:(NSString*)str0 withString:(NSString*)str1;
 @property (nonatomic, strong) id associatedObject;
 @end
 
@@ -52,22 +55,41 @@ static NSDictionary *noAttributes;
  
 }
 
-// TODO - revisit this monster.
+
+-(NSMutableString*)replaceOccurrencesOfString:(NSString*)str0 withString:(NSString*)str1{
+
+    NSMutableString *str =  [[NSMutableString alloc]initWithString:self.string];
+    [str replaceOccurrencesOfString:str0 withString:str1 options:0 range:NSMakeRange(0, self.string.length)];
+    return str;
+ 
+}
+// TODO - revisit this fragile category monster.
+// The intention was to allow an array cursor for every line in source file.
 // We need to keep around the entire source file with all NSMutableAttributedString row /lines in tact
 // to  manipulate the highlighted content and not lose any introspected data as the highlight syntax is a one shot process.
 // it's safer to hide the rows than to delete content or alter ranges.
+//
 -(NSMutableArray*)lines{
 
      NSMutableArray *arr1;
     static NSMutableDictionary *d0 =nil;
+    static NSString *lastAttribute = nil;
     
     if (d0 == nil ) {
         d0 = [NSMutableDictionary dictionary];
         arr1 =[[NSMutableArray alloc]init];
+        lastAttribute = self.string;
          [d0 setObject:arr1 forKey:self.string];
     }else{
-        arr1 =   [d0 valueForKey:self.string];
-        if (arr1 ==nil) {
+        if ([lastAttribute isEqualToString:self.string]){
+             arr1 = [d0 valueForKey:self.string];
+             NSLog(@"line count:%d",(int)arr1.count);
+            return arr1;
+            
+        }else{
+            // we're switching attributes / flush out previous lines.
+            [d0 removeObjectForKey:lastAttribute];
+            lastAttribute = self.string;
             arr1 =[[NSMutableArray alloc]init];
             [d0 setObject:arr1 forKey:self.string];
         }
@@ -87,6 +109,7 @@ static NSDictionary *noAttributes;
          index = NSMaxRange(range);
     }
     
+    NSLog(@"line count:%d",(int)arr1.count);
     return arr1;
 
 }
@@ -158,17 +181,18 @@ static NSDictionary *noAttributes;
     NSMutableString *swiftSource = [[NSMutableString alloc]init];
     NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber];
     NSMutableAttributedString *line = d0[kAttributeString];
+    
+    
+//    @implementation
     NSString *className = [[line.string componentsSeparatedByString:@" "] objectAtIndex:1];
     className = [className stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    
-    
+
     // delete every line / import statements above this class {
-    [lines enumerateObjectsUsingBlock:^(NSMutableDictionary *d1, NSUInteger idx, BOOL *stop) {
-        if (idx < lineNumber) {
-           [d1 setObject:[NSNumber numberWithInt:1] forKey:kIsLineDeleted];
-        }
-    }];
+//    [lines enumerateObjectsUsingBlock:^(NSMutableDictionary *d1, NSUInteger idx, BOOL *stop) {
+//        if (idx < lineNumber) {
+//           [d1 setObject:[NSNumber numberWithInt:1] forKey:kIsLineDeleted];
+//        }
+//    }];
     NSString *swift = [NSString stringWithFormat:@"class %@ {\r",className];
     [swiftSource appendString:swift];
 
@@ -227,50 +251,171 @@ static NSDictionary *noAttributes;
   
 }
 
+/*
+ @interface JPTableView:NSTableView
+ @end
+ */
+-(NSMutableDictionary*)superClassAndIVarsForInterface:(NSArray*)_lines lineNumber:(NSUInteger)lineNumber{
+    lines = _lines;
+    currentLineOffset = lineNumber;
+
+    NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber];
+    NSMutableAttributedString *line = d0[kAttributeString];
+    NSMutableString *swiftSource = [[NSMutableString alloc]init];
+    NSMutableDictionary *d1 = [[NSMutableDictionary alloc]init];
+    
+    //  @interface
+    @try {
+        NSString *superClass = [[line.string componentsSeparatedByString:@":"] objectAtIndex:1];
+        superClass = [superClass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]; //JPTableView:NSTableView -> NSTableView
+        [d0 setObject:@1 forKey:kIsLineDeleted]; // delete this line
+        [d1 setObject:superClass forKey:@"superClass"];
+    }
+    @catch (NSException *exception) {
+        [d0 setObject:@1 forKey:kIsLineDeleted]; // delete this line
+    }
+    @finally {
+        
+    }
+   
+    // process the subsequent lines for vars.
+    [lines enumerateObjectsUsingBlock:^(NSMutableDictionary *dc, NSUInteger idx0, BOOL *stop0) {
+        if (idx0 >lineNumber) {
+            NSMutableAttributedString *line = dc[kAttributeString];
+        
+            if ([line.string isEqualToString:@""]) {
+                [dc setObject:@1 forKey:kIsLineDeleted];
+            }
+            
+            if ([line.string containsString:@"@implementation"]) {
+                *stop0 = YES;
+            }
+            if ([line.string containsString:@"@end"]) {
+                [dc setObject:@1 forKey:kIsLineDeleted];
+                *stop0 = YES;
+            }
+            
+            if ([line.string containsString:@"{"]) {
+                
+                [lines enumerateObjectsUsingBlock:^(NSMutableDictionary *dd, NSUInteger idx1, BOOL *stop1) {
+                    if (idx1 > idx0) {
+                        NSMutableAttributedString *aStr = dd[kAttributeString];
+                        NSMutableString *nextLine = [[NSMutableString alloc]init];
+                        nextLine.string = aStr.string;
+                        
+                        //  strip out _ variable names
+                        [nextLine replaceOccurrencesOfString:@"_" withString:@"" options:0 range:NSMakeRange(0, nextLine.length)];
+                        
+                        NSArray *params = [nextLine componentsSeparatedByString:@" "];
+                        NSArray *arr =[self matchesRegExpression:@"^\\s*(\\w.*)\\s+(\\w+)\\s*;/" searchString:nextLine];
+                        if (arr.count) {
+                            NSString *name = params[1];
+                            NSString *type = params[0];
+                            NSString *bla = [NSString stringWithFormat:@"private var %@: %@\r",name,type];
+                            [swiftSource appendString:bla];
+                        }
+                        
+                        
+                        if ([nextLine isEqualToString:@"}"])  {
+                            *stop0 = YES;
+                            *stop1 = YES;
+                        }
+                    }
+                    
+                }];
+            }
+        }
+        
+    }];
+    
+    [d1 setObject:swiftSource forKey:@"swiftSource"];
+    return d1;
+    
+}
+
+
+
+// Rebuild Import Statements / strip out any <Cocoa/Cocoa> patterns -> import Cocoa
+-(void)fixImportStatement:(NSMutableAttributedString*)attStr lineNumber:(NSUInteger)lineNumber{
+    lines = attStr.lines;
+    currentLineOffset = lineNumber;
+    
+    NSMutableString *swiftSource = [[NSMutableString alloc]init];
+    NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber];
+    NSMutableAttributedString *line = d0[kAttributeString];
+    
+        //@"#import <QuartzCore/QuartzCore.h>" -> Import @QuartzCore
+
+       if ([line.string containsString:@"<"]) {
+                NSArray *arr0 = [line.string componentsSeparatedByString:@"<"];  //   #import <,  QuartzCore/QuartzCore.h>"
+                NSString *str = arr0[1];  //QuartzCore/QuartzCore.h>"
+                NSArray *arr1 = [str componentsSeparatedByString:@"/"]; //  QuartzCore ,QuartzCore.h>
+                NSString *str2 = arr1[0];
+                [swiftSource appendString:@"Import @"];
+                [swiftSource appendString:str2];
+                [d0 setObject: [[NSMutableAttributedString alloc]initWithString:swiftSource] forKey:kAttributeString];
+    
+       }else{
+           [attStr removeRowAtIndex:currentLineOffset]; // eg. #import "AbstractOSXCell.h"
+       }
+
+  
+}
+
 
 - (NSString*)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection
 {
     NSMutableAttributedString *source = file.source;
     
-    //    Class class =NSClassFromString(className);
-    //SCKClass *cls = [sourceCollection.bundleClasses objectForKey:@"AudioController"] ;
-//    SCKClass *cls = [[SCKClass alloc] initWithClass:class];
-//    [cls.methods enumerateKeysAndObjectsUsingBlock:^(SCKMethod *method, id obj, BOOL *stop) {
-//        NSLog(@"method:%@",method);
-//    }];
-
     currentLineOffset = -1;
-    NSMutableArray *arrSourceLines =source.lines;
-    [arrSourceLines enumerateObjectsUsingBlock:^(NSMutableDictionary *d0 , NSUInteger idx, BOOL *stop0) {
+   
+    [source.lines enumerateObjectsUsingBlock:^(NSMutableDictionary *d0 , NSUInteger idx, BOOL *stop0) {
+        
+        
         NSMutableAttributedString *line = d0[kAttributeString];
+        NSMutableDictionary *currentSuperclass;
         
-//         NSLog(@"currentLineOffset:%d",(int)currentLineOffset);
-//        NSLog(@"idx:%d",(int)idx);
+        // CRUDE PASS
+        if ([line.string containsString:@"#import"]){
+            [self fixImportStatement:source lineNumber:idx];
+        }
         
-//        if (idx < currentLineOffset) {
-//               [d0 setObject:[NSNumber numberWithInt:1] forKey:kIsLineDeleted];
-//           // [source removeRowAtIndex:idx]; // blow the line away   as we  processed these lines below by parseimplementation
-//        }
-//RegExCategories
+        if ([line.string containsString:@"@interface"]) {
+            currentSuperclass =   [self superClassAndIVarsForInterface:source.lines lineNumber:idx];
+            NSLog(@"currentSuperclass:%@",currentSuperclass);
+
+        }
+        if ([line.string containsString:@"@implementation"]) {
+            NSMutableString* headerCode =   [self parseImplementation:source.lines lineNumber:idx];
+            [d0 setObject: [[NSMutableAttributedString alloc]initWithString:headerCode] forKey:kAttributeString];
+
+        }
+         if ([line.string containsString:@"#pragma mark"]) {
+             [d0 setObject:[line replaceOccurrencesOfString:@"#pragma mark" withString:@"//MARK "]  forKey:kAttributeString];
+         }
+        
+        
+        
+        // DROP INTO ATTRIBUTES FOR MORE GRANULARITY OF EACH TOKEN IN STRING
         [line  enumerateAttributesInRange:NSMakeRange(0, line.length) options:0  usingBlock:^(NSDictionary* attrs, NSRange range, BOOL *stop1) {
             NSString *semantic = [attrs objectForKey:kSCKTextSemanticType];
+//            NSLog(@"SCKObjCImplementationDecl:%@",attrs);
+//            NSLog(@"SCKObjCImplementationDecl:%@ string:%@",[line attributedSubstringFromRange:range] ,line.string);
+
             if ([semantic isEqualToString:SCKObjCClassMethodDecl]) {
-                  [line deleteCharactersInRange:range];
+               // NSLog(@"SCKObjCClassMethodDecl:%@",attrs);
+               // NSLog(@"SCKObjCClassMethodDecl:%@ string:%@",[line attributedSubstringFromRange:range] ,line.string);
+                [line deleteCharactersInRange:range];
             }
-            if ([semantic isEqualToString:SCKObjCImplementationDecl]) { // RIP OUT import statements INTERFACE ->@implementation AudioController
-                if ([line.string containsString:@"@implementation"]) {
-                    NSLog(@"SCKObjCImplementationDecl:%@",attrs);
-                    NSLog(@"SCKObjCImplementationDecl:%@ string:%@",[line attributedSubstringFromRange:range] ,line.string);
-                  NSMutableString* headerCode =   [self parseImplementation:arrSourceLines lineNumber:idx];
-                 // [source updateAttributeAtLine:idx attributeString:];
-                       [d0 setObject: [[NSMutableAttributedString alloc]initWithString:headerCode] forKey:kAttributeString];
-                    *stop1 = YES;
-                }
+            if ([semantic isEqualToString:SCKObjCImplementationDecl]) {
+                // RIP OUT import statements INTERFACE ->@implementation AudioController
+                 [line deleteCharactersInRange:range];
             }
             if ([[attrs valueForKey:kSCKTextTokenType ] isEqualToString:SCKTextTypeDeclRef] ) { // remove type defs
                 [line deleteCharactersInRange:range];
             }
-            if ([[attrs valueForKey:kSCKTextTokenType ] isEqualToString:SCKTextTypePreprocessorDirective] ) { // remove preprocessor stuff - TODO - switch out PRAGRAM -> //MARK ->
+            if ([[attrs valueForKey:kSCKTextTokenType ] isEqualToString:SCKTextTypePreprocessorDirective] ) {
+                // remove preprocessor stuff - TODO - switch out PRAGRAM -> //MARK ->
                 [line deleteCharactersInRange:range];
             }
         }];
@@ -278,7 +423,7 @@ static NSDictionary *noAttributes;
     }];
     
     source = source.cookedAttributeText;
- //   NSLog(@"source.cookedText:%@",source.cookedText);
+
     
     if (source == nil) {
         return @"";

@@ -22,8 +22,11 @@
 		4FA72FEC189A352400AFD8B3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FA72FEB189A352400AFD8B3 /* Images.xcassets */; };
 		4FA72FF1189A35A000AFD8B3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA72FF0189A35A000AFD8B3 /* main.m */; };
 		4FA72FF4189A35BA00AFD8B3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4FA72FF2189A35BA00AFD8B3 /* Credits.rtf */; };
-		4FA72FF8189A370600AFD8B3 /* Chime.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4FA72FE0189A32A100AFD8B3 /* Chime.framework */; };
 		4FD32104189CB42D00D59683 /* XcodebuildTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD32103189CB42D00D59683 /* XcodebuildTask.m */; };
+		5D21236E1B65B38E00DC5B7A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5D2123681B65B38E00DC5B7A /* LICENSE.txt */; };
+		5D21236F1B65B38E00DC5B7A /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123691B65B38E00DC5B7A /* readme.md */; };
+		5D2123701B65B38E00DC5B7A /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21236B1B65B38E00DC5B7A /* RegExCategories.m */; };
+		5DF9F49B1B60D0D900F767FE /* Chime.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5DF9F4961B60D0BA00F767FE /* Chime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,27 @@
 			remoteGlobalIDString = 4FA72FA8189A325E00AFD8B3;
 			remoteInfo = ChimeTester;
 		};
+		5DF9F4951B60D0BA00F767FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4FA72F551899D3BF00AFD8B3;
+			remoteInfo = "Chime Mac Framework";
+		};
+		5DF9F4971B60D0BA00F767FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4FA72F6C1899D3BF00AFD8B3;
+			remoteInfo = "Chime Mac Framework Tests";
+		};
+		5DF9F4991B60D0CF00F767FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FA72F541899D3BF00AFD8B3;
+			remoteInfo = "Chime Mac Framework";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,7 +67,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4FA72FF8189A370600AFD8B3 /* Chime.framework in CopyFiles */,
+				5DF9F49B1B60D0D900F767FE /* Chime.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +100,11 @@
 		4FA72FF3189A35BA00AFD8B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		4FD32102189CB42D00D59683 /* XcodebuildTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XcodebuildTask.h; sourceTree = "<group>"; };
 		4FD32103189CB42D00D59683 /* XcodebuildTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XcodebuildTask.m; sourceTree = "<group>"; };
+		5D2123681B65B38E00DC5B7A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		5D2123691B65B38E00DC5B7A /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		5D21236A1B65B38E00DC5B7A /* RegExCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExCategories.h; sourceTree = "<group>"; };
+		5D21236B1B65B38E00DC5B7A /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
+		5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Chime Mac Framework.xcodeproj"; path = "../../Chime Frameworks/Chime Mac Framework/Chime Mac Framework.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +132,8 @@
 		4FA72FA0189A325E00AFD8B3 = {
 			isa = PBXGroup;
 			children = (
+				5D2123641B65B38D00DC5B7A /* External */,
+				5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */,
 				4FA72FB2189A325E00AFD8B3 /* Chime Project Indexer */,
 				4FA72FD0189A325E00AFD8B3 /* Chime Project Indexer Tests */,
 				4FA72FAB189A325E00AFD8B3 /* Frameworks */,
@@ -188,6 +219,35 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		5D2123641B65B38D00DC5B7A /* External */ = {
+			isa = PBXGroup;
+			children = (
+				5D2123651B65B38D00DC5B7A /* Objective-C-RegEx */,
+			);
+			name = External;
+			path = ../External;
+			sourceTree = "<group>";
+		};
+		5D2123651B65B38D00DC5B7A /* Objective-C-RegEx */ = {
+			isa = PBXGroup;
+			children = (
+				5D2123681B65B38E00DC5B7A /* LICENSE.txt */,
+				5D2123691B65B38E00DC5B7A /* readme.md */,
+				5D21236A1B65B38E00DC5B7A /* RegExCategories.h */,
+				5D21236B1B65B38E00DC5B7A /* RegExCategories.m */,
+			);
+			path = "Objective-C-RegEx";
+			sourceTree = "<group>";
+		};
+		5DF9F4901B60D0B900F767FE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5DF9F4961B60D0BA00F767FE /* Chime.framework */,
+				5DF9F4981B60D0BA00F767FE /* Chime Mac Framework Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -203,6 +263,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5DF9F49A1B60D0CF00F767FE /* PBXTargetDependency */,
 			);
 			name = "Chime Project Indexer";
 			productName = ChimeTester;
@@ -252,6 +313,12 @@
 			mainGroup = 4FA72FA0189A325E00AFD8B3;
 			productRefGroup = 4FA72FAA189A325E00AFD8B3 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5DF9F4901B60D0B900F767FE /* Products */;
+					ProjectRef = 5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4FA72FA8189A325E00AFD8B3 /* Chime Project Indexer */,
@@ -260,12 +327,30 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		5DF9F4961B60D0BA00F767FE /* Chime.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Chime.framework;
+			remoteRef = 5DF9F4951B60D0BA00F767FE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5DF9F4981B60D0BA00F767FE /* Chime Mac Framework Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Chime Mac Framework Tests.xctest";
+			remoteRef = 5DF9F4971B60D0BA00F767FE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		4FA72FA7189A325E00AFD8B3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4FA72FE7189A34F400AFD8B3 /* InfoPlist.strings in Resources */,
+				5D21236E1B65B38E00DC5B7A /* LICENSE.txt in Resources */,
 				4FA72FEC189A352400AFD8B3 /* Images.xcassets in Resources */,
 				4FA72FEA189A350B00AFD8B3 /* MainMenu.xib in Resources */,
 				4F4A6696189B03EF00695F64 /* IndexDocument.xib in Resources */,
@@ -290,8 +375,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F437689189C323600B35086 /* ChooseSchemeEtcSheetController.m in Sources */,
+				5D2123701B65B38E00DC5B7A /* RegExCategories.m in Sources */,
 				4FD32104189CB42D00D59683 /* XcodebuildTask.m in Sources */,
 				4F4A6690189B039600695F64 /* IndexDocument.m in Sources */,
+				5D21236F1B65B38E00DC5B7A /* readme.md in Sources */,
 				4FA72FF1189A35A000AFD8B3 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -311,6 +398,11 @@
 			isa = PBXTargetDependency;
 			target = 4FA72FA8189A325E00AFD8B3 /* Chime Project Indexer */;
 			targetProxy = 4FA72FCE189A325E00AFD8B3 /* PBXContainerItemProxy */;
+		};
+		5DF9F49A1B60D0CF00F767FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Chime Mac Framework";
+			targetProxy = 5DF9F4991B60D0CF00F767FE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

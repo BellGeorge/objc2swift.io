@@ -13,3 +13,4 @@
 #import <Chime/ChimeClass.h>
 #import <Chime/ChimeCategory.h>
 #import <Chime/ChimeClassExtension.h>
+#import <Chime/RegExCategories.h>

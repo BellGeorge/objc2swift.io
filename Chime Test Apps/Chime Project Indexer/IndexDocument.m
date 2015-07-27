@@ -11,11 +11,18 @@
 
 #import "ChooseSchemeEtcSheetController.h"
 #import "XcodeBuildTask.h"
-
+#import <Chime/SCKSourceCollection.h>
+#import <Chime/SCKIntrospection.h>
+#import <Chime/SCKClangSourceFile.h>
 #import <Chime/Chime.h>
+#import <Chime/DDFileReader.h>
+#import <Chime/SCKSyntaxHighlighter.h>
+
 
 @interface IndexDocument () <NSTableViewDataSource>
-
+{
+    SCKSourceCollection *sourceCollection;
+}
 @property (nonatomic) NSURL *projectOrWorkspaceFileURL;
 
 @property (nonatomic) XcodebuildTask *xcodebuildTask;
@@ -53,9 +60,96 @@
     self = [super init];
     if (self) {
         // Add your subclass-specific initialization here.
+        /* Prevent reparsing the source files each time a test method is run */
+        BOOL parsed = (sourceCollection != nil);
+        if (parsed == NO)
+        {
+            sourceCollection = [SCKSourceCollection new];
+
+            //	[sourceCollection setIgnoresIncludedSymbols: YES];
+            //[self parseSourceFilesIntoCollection: sourceCollection];
+        }
     }
     return self;
 }
+
+
+- (NSArray*)parsingTestFiles
+{
+    NSBundle *bundle = [NSBundle bundleForClass: [self class]];
+    NSArray *testFiles = [bundle pathsForResourcesOfType: @"h" inDirectory: nil];
+    testFiles = [testFiles arrayByAddingObjectsFromArray:
+                 [bundle pathsForResourcesOfType: @"m" inDirectory: nil]];
+    //	ETAssert([testFiles count] >= 2);
+    return testFiles;
+}
+
+- (void)parseSourceFilesIntoCollection: (SCKSourceCollection*)aSourceCollection
+{
+    NSParameterAssert(aSourceCollection != nil);
+    
+    //	[aSourceCollection clear];
+    
+    for (NSString *path in [self parsingTestFiles])
+    {
+        [aSourceCollection sourceFileForPath: path];
+    }
+}
+
+
+//- (SCKClangSourceFile*)parsedFileForName: (NSString*)aFileName
+//{
+//    
+//    NSArray *files = [[self parsingTestFiles] filteredCollectionWithBlock: ^ (id path)
+//    {
+//                          return [[path lastPathComponent] isEqual: aFileName];
+//    }];
+//    return (id)[sourceCollection sourceFileForPath: [files firstObject]];
+//}
+
+//- (NSDictionary*)programComponentsFromFilesForKey: (NSString*)key
+//{
+//    NSMutableDictionary *components = [NSMutableDictionary new];
+//    for (SCKSourceFile *file in [[sourceCollection files] objectEnumerator])
+//    {
+//        [components addEntriesFromDictionary: [file valueForKey: key]];
+//    }
+//    return components;
+//}
+
+- (SCKClass*)parsedClassForName: (NSString*)aClassName
+{
+    return [[sourceCollection classes] objectForKey: aClassName];
+}
+
+//- (SCKProtocol*)parsedProtocolForName: (NSString*)aProtocolName
+//{
+//    return [[sourceCollection protocols] objectForKey: aProtocolName];
+//}
+
+- (NSArray*)parsedFunctionsForNames: (NSArray*)functionNames
+{
+    return [[sourceCollection functions] objectsForKeys: functionNames notFoundMarker: [NSNull null]];
+}
+
+- (NSArray*)parsedGlobalsForNames: (NSArray*)globalNames
+{
+    return [[sourceCollection globals] objectsForKeys: globalNames notFoundMarker: [NSNull null]];
+}
+
+//- (NSArray*)parsedEnumerationsForNames: (NSArray*)enumerationNames
+//{
+//    NSDictionary *enumValues = [self programComponentsFromFilesForKey: @"enumerationValues"];
+//    return [enumValues objectsForKeys: enumerationNames notFoundMarker: [NSNull null]];
+//}
+//
+//- (NSArray*)parsedMacrosForNames: (NSArray*)macroNames
+//{
+//    NSDictionary *macros = [self programComponentsFromFilesForKey: @"macros"];
+//    return [macros objectsForKeys: macroNames notFoundMarker: [NSNull null]];
+//}
+//
+
 
 - (NSString *)windowNibName
 {
@@ -366,21 +460,76 @@ static NSMutableArray *argumentsFromSingleString(NSString *singleString) {
                         
                         [arguments removeObjectsInRange:NSMakeRange([arguments count] - 4, 4)];
                         
-                        ChimeTranslationUnit *tu = [[ChimeTranslationUnit alloc] initWithFileURL:fileURL arguments:arguments index:self.index];
-                        if (tu == nil) {
-                            // TODO: provide error
-                            NSLog(@"Couldn't create translation unit for file \"%@\"", [fileURL path]);
-                        } else {
-                            [result addObject:tu];
-                        }
+                        SCKSourceFile *implementation = [sourceCollection sourceFileForPath: fileURL.path]; //.m files
+                        NSMutableString *headerFile = [NSMutableString stringWithFormat:@"%@",fileURL.path];
+                        [headerFile replaceOccurrencesOfString:@".m" withString:@".h" options:0 range:NSMakeRange(0, headerFile.length)];
+                        SCKSourceFile *hFile = [sourceCollection sourceFileForPath: headerFile]; //.h files - may not exist??
+//
+//                    
+    
+                        
+//                        SCKClass *classA = [self parsedClassForName: @"A"];
+//                        SCKClass *classB = [self parsedClassForName: @"B"];
+//                        [[[classA declaration] file] lastPathComponent];
+                        
+//                        ChimeTranslationUnit *tu = [[ChimeTranslationUnit alloc] initWithFileURL:fileURL arguments:arguments index:self.index];
+//                        if (tu == nil) {
+//                            // TODO: provide error
+//                            NSLog(@"Couldn't create translation unit for file \"%@\"", [fileURL path]);
+//                        } else {
+//                            [result addObject:tu];
+//                        }
                     }
                 }
             }
         }
     }
     
+  //  NSLog(@"sourceCollection:%@",sourceCollection);
+  //  NSLog(@"enumerationValues:%@",sourceCollection.enumerationValues);
+   // NSLog(@"classes:%@",sourceCollection.classes);
+    //NSLog(@"files:%@",sourceCollection->files);
+    //NSLog(@"functions:%@",sourceCollection.functions);
+    
+//    [sourceCollection.classes enumerateKeysAndObjectsUsingBlock:^(SCKClass *c, id obj, BOOL *stop) {
+//       NSLog(@"file.fileName:%@",c);
+//        
+//        if ([c isKindOfClass:[SCKClass class]]) {
+//            [c.methods enumerateKeysAndObjectsUsingBlock:^(SCKMethod *m, id obj, BOOL *stop) {
+//                NSLog(@"definition:%@",m.definition);
+//                NSLog(@"declaration:%@",m.declaration);
+//            }];
+//            
+//        }
+//     
+//    }];
+    [sourceCollection.files enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCKClangSourceFile *file, BOOL * __nonnull stop) {
+        
+        if ([file isKindOfClass:[SCKClangSourceFile class]]) {
+
+
+            DDFileReader *reader = [[DDFileReader alloc]initWithFilePath:file.fileName];
+            //while ( [reader convertNextLine]) {
+             //   NSLog(@"read line: %@", line);
+           // }
+            NSLog(@"file.fileName:%@",file.fileName);
+
+            [reader createSwiftFileFrom:file sourceCollection:sourceCollection];
+            
+            //initWithClass
+            
+            
+        }
+        
+        
+    }];
+    
+    
     return result;
 }
+
+
+
 
 - (void)handleStage5_parsingTranslationUnits {
     for (ChimeTranslationUnit *tu in self.translationUnits) {

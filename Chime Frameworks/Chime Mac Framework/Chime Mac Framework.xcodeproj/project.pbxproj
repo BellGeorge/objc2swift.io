@@ -55,6 +55,38 @@
 		4FEC4425189F5DAA0030FF27 /* ChimeSymbol_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FEC4424189F5D540030FF27 /* ChimeSymbol_Private.h */; };
 		4FEC4428189F648C0030FF27 /* NSString+ChimeFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FEC4426189F648C0030FF27 /* NSString+ChimeFramework.h */; };
 		4FEC4429189F648C0030FF27 /* NSString+ChimeFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEC4427189F648C0030FF27 /* NSString+ChimeFramework.m */; };
+		5D2123531B60EBE500DC5B7A /* AB.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D21234D1B60EBE500DC5B7A /* AB.h */; };
+		5D2123561B60EBE500DC5B7A /* TestCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2123501B60EBE500DC5B7A /* TestCommon.h */; };
+		5D21235A1B60EC3F00DC5B7A /* TestCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123511B60EBE500DC5B7A /* TestCommon.m */; };
+		5D21235B1B60EC4400DC5B7A /* AB.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21234E1B60EBE500DC5B7A /* AB.m */; };
+		5D21235D1B60EE3000DC5B7A /* SKTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21235C1B60EE3000DC5B7A /* SKTest.m */; };
+		5D2123601B61CC3800DC5B7A /* DDFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21235F1B61CC3800DC5B7A /* DDFileReader.m */; };
+		5D2123621B61CE6D00DC5B7A /* DDFileReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2123611B61CC4600DC5B7A /* DDFileReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5D2123781B65B43D00DC5B7A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5D2123741B65B43D00DC5B7A /* LICENSE.txt */; };
+		5D2123791B65B43D00DC5B7A /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123751B65B43D00DC5B7A /* readme.md */; };
+		5D21237A1B65B43D00DC5B7A /* RegExCategories.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2123761B65B43D00DC5B7A /* RegExCategories.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5D21237B1B65B43D00DC5B7A /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123771B65B43D00DC5B7A /* RegExCategories.m */; };
+		5DF9F4DB1B60E13300F767FE /* Readme in Resources */ = {isa = PBXBuildFile; fileRef = 5DF9F4DA1B60E13300F767FE /* Readme */; };
+		5DF9F4F71B60E64200F767FE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5DF9F4E11B60E64200F767FE /* InfoPlist.strings */; };
+		5DF9F4F81B60E64200F767FE /* SCKClangSourceFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4E31B60E64200F767FE /* SCKClangSourceFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F4F91B60E64200F767FE /* SCKClangSourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4E41B60E64200F767FE /* SCKClangSourceFile.m */; };
+		5DF9F4FA1B60E64200F767FE /* SCKCodeCompletionResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4E51B60E64200F767FE /* SCKCodeCompletionResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F4FB1B60E64200F767FE /* SCKCodeCompletionResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4E61B60E64200F767FE /* SCKCodeCompletionResult.m */; };
+		5DF9F4FC1B60E64200F767FE /* SCKIntrospection.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4E71B60E64200F767FE /* SCKIntrospection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F4FD1B60E64200F767FE /* SCKIntrospection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4E81B60E64200F767FE /* SCKIntrospection.m */; };
+		5DF9F4FE1B60E64200F767FE /* SCKProject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4E91B60E64200F767FE /* SCKProject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F4FF1B60E64200F767FE /* SCKProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4EA1B60E64200F767FE /* SCKProject.m */; };
+		5DF9F5001B60E64200F767FE /* SCKSourceCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4EB1B60E64200F767FE /* SCKSourceCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F5011B60E64200F767FE /* SCKSourceCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4EC1B60E64200F767FE /* SCKSourceCollection.m */; };
+		5DF9F5021B60E64200F767FE /* SCKSourceFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4ED1B60E64200F767FE /* SCKSourceFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F5031B60E64200F767FE /* SCKSourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4EE1B60E64200F767FE /* SCKSourceFile.m */; };
+		5DF9F5041B60E64200F767FE /* SCKSyntaxHighlighter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4EF1B60E64200F767FE /* SCKSyntaxHighlighter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F5051B60E64200F767FE /* SCKSyntaxHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4F01B60E64200F767FE /* SCKSyntaxHighlighter.m */; };
+		5DF9F5061B60E64200F767FE /* SCKTextTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4F11B60E64200F767FE /* SCKTextTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F5071B60E64200F767FE /* SCKTextTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF9F4F21B60E64200F767FE /* SCKTextTypes.m */; };
+		5DF9F5081B60E64200F767FE /* SourceCodeKit-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5DF9F4F31B60E64200F767FE /* SourceCodeKit-Info.plist */; };
+		5DF9F5091B60E64200F767FE /* SourceCodeKit-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4F41B60E64200F767FE /* SourceCodeKit-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DF9F50A1B60E64200F767FE /* SourceCodeKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF9F4F51B60E64200F767FE /* SourceCodeKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +162,38 @@
 		4FEC4424189F5D540030FF27 /* ChimeSymbol_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChimeSymbol_Private.h; sourceTree = "<group>"; };
 		4FEC4426189F648C0030FF27 /* NSString+ChimeFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ChimeFramework.h"; sourceTree = "<group>"; };
 		4FEC4427189F648C0030FF27 /* NSString+ChimeFramework.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ChimeFramework.m"; sourceTree = "<group>"; };
+		5D21234D1B60EBE500DC5B7A /* AB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AB.h; sourceTree = "<group>"; };
+		5D21234E1B60EBE500DC5B7A /* AB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AB.m; sourceTree = "<group>"; };
+		5D2123501B60EBE500DC5B7A /* TestCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCommon.h; sourceTree = "<group>"; };
+		5D2123511B60EBE500DC5B7A /* TestCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCommon.m; sourceTree = "<group>"; };
+		5D21235C1B60EE3000DC5B7A /* SKTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SKTest.m; path = ../SourceCodeKit/Test/SKTest.m; sourceTree = "<group>"; };
+		5D21235F1B61CC3800DC5B7A /* DDFileReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileReader.m; sourceTree = "<group>"; };
+		5D2123611B61CC4600DC5B7A /* DDFileReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDFileReader.h; sourceTree = "<group>"; };
+		5D2123741B65B43D00DC5B7A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		5D2123751B65B43D00DC5B7A /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		5D2123761B65B43D00DC5B7A /* RegExCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExCategories.h; sourceTree = "<group>"; };
+		5D2123771B65B43D00DC5B7A /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
+		5DF9F4DA1B60E13300F767FE /* Readme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme; sourceTree = "<group>"; };
+		5DF9F4E21B60E64200F767FE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5DF9F4E31B60E64200F767FE /* SCKClangSourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKClangSourceFile.h; sourceTree = "<group>"; };
+		5DF9F4E41B60E64200F767FE /* SCKClangSourceFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKClangSourceFile.m; sourceTree = "<group>"; };
+		5DF9F4E51B60E64200F767FE /* SCKCodeCompletionResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKCodeCompletionResult.h; sourceTree = "<group>"; };
+		5DF9F4E61B60E64200F767FE /* SCKCodeCompletionResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKCodeCompletionResult.m; sourceTree = "<group>"; };
+		5DF9F4E71B60E64200F767FE /* SCKIntrospection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKIntrospection.h; sourceTree = "<group>"; };
+		5DF9F4E81B60E64200F767FE /* SCKIntrospection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKIntrospection.m; sourceTree = "<group>"; };
+		5DF9F4E91B60E64200F767FE /* SCKProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKProject.h; sourceTree = "<group>"; };
+		5DF9F4EA1B60E64200F767FE /* SCKProject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKProject.m; sourceTree = "<group>"; };
+		5DF9F4EB1B60E64200F767FE /* SCKSourceCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKSourceCollection.h; sourceTree = "<group>"; };
+		5DF9F4EC1B60E64200F767FE /* SCKSourceCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKSourceCollection.m; sourceTree = "<group>"; };
+		5DF9F4ED1B60E64200F767FE /* SCKSourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKSourceFile.h; sourceTree = "<group>"; };
+		5DF9F4EE1B60E64200F767FE /* SCKSourceFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKSourceFile.m; sourceTree = "<group>"; };
+		5DF9F4EF1B60E64200F767FE /* SCKSyntaxHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKSyntaxHighlighter.h; sourceTree = "<group>"; };
+		5DF9F4F01B60E64200F767FE /* SCKSyntaxHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKSyntaxHighlighter.m; sourceTree = "<group>"; };
+		5DF9F4F11B60E64200F767FE /* SCKTextTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKTextTypes.h; sourceTree = "<group>"; };
+		5DF9F4F21B60E64200F767FE /* SCKTextTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKTextTypes.m; sourceTree = "<group>"; };
+		5DF9F4F31B60E64200F767FE /* SourceCodeKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SourceCodeKit-Info.plist"; sourceTree = "<group>"; };
+		5DF9F4F41B60E64200F767FE /* SourceCodeKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SourceCodeKit-Prefix.pch"; sourceTree = "<group>"; };
+		5DF9F4F51B60E64200F767FE /* SourceCodeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceCodeKit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +252,9 @@
 		4FA72F4B1899D3BF00AFD8B3 = {
 			isa = PBXGroup;
 			children = (
+				5D21234B1B60EBE500DC5B7A /* Tests */,
+				5DF9F4E01B60E64200F767FE /* SourceCodeKit */,
+				5DF9F4DA1B60E13300F767FE /* Readme */,
 				4FA4AF32189D920A0005DA9F /* Shared */,
 				4FA72F5E1899D3BF00AFD8B3 /* Chime */,
 				4FA72F731899D3BF00AFD8B3 /* Chime Mac Framework Tests */,
@@ -277,6 +344,67 @@
 			path = "clang-c";
 			sourceTree = "<group>";
 		};
+		5D21234B1B60EBE500DC5B7A /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				5D21235C1B60EE3000DC5B7A /* SKTest.m */,
+				5D21234C1B60EBE500DC5B7A /* ParsingTestFiles */,
+				5D2123501B60EBE500DC5B7A /* TestCommon.h */,
+				5D2123511B60EBE500DC5B7A /* TestCommon.m */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		5D21234C1B60EBE500DC5B7A /* ParsingTestFiles */ = {
+			isa = PBXGroup;
+			children = (
+				5D21234D1B60EBE500DC5B7A /* AB.h */,
+				5D21234E1B60EBE500DC5B7A /* AB.m */,
+			);
+			path = ParsingTestFiles;
+			sourceTree = "<group>";
+		};
+		5D2123731B65B43D00DC5B7A /* Objective-C-RegEx */ = {
+			isa = PBXGroup;
+			children = (
+				5D2123741B65B43D00DC5B7A /* LICENSE.txt */,
+				5D2123751B65B43D00DC5B7A /* readme.md */,
+				5D2123761B65B43D00DC5B7A /* RegExCategories.h */,
+				5D2123771B65B43D00DC5B7A /* RegExCategories.m */,
+			);
+			path = "Objective-C-RegEx";
+			sourceTree = "<group>";
+		};
+		5DF9F4E01B60E64200F767FE /* SourceCodeKit */ = {
+			isa = PBXGroup;
+			children = (
+				5D2123731B65B43D00DC5B7A /* Objective-C-RegEx */,
+				5DF9F4E11B60E64200F767FE /* InfoPlist.strings */,
+				5DF9F4E31B60E64200F767FE /* SCKClangSourceFile.h */,
+				5DF9F4E41B60E64200F767FE /* SCKClangSourceFile.m */,
+				5DF9F4E51B60E64200F767FE /* SCKCodeCompletionResult.h */,
+				5DF9F4E61B60E64200F767FE /* SCKCodeCompletionResult.m */,
+				5DF9F4E71B60E64200F767FE /* SCKIntrospection.h */,
+				5DF9F4E81B60E64200F767FE /* SCKIntrospection.m */,
+				5DF9F4E91B60E64200F767FE /* SCKProject.h */,
+				5DF9F4EA1B60E64200F767FE /* SCKProject.m */,
+				5DF9F4EB1B60E64200F767FE /* SCKSourceCollection.h */,
+				5DF9F4EC1B60E64200F767FE /* SCKSourceCollection.m */,
+				5DF9F4ED1B60E64200F767FE /* SCKSourceFile.h */,
+				5DF9F4EE1B60E64200F767FE /* SCKSourceFile.m */,
+				5DF9F4EF1B60E64200F767FE /* SCKSyntaxHighlighter.h */,
+				5DF9F4F01B60E64200F767FE /* SCKSyntaxHighlighter.m */,
+				5DF9F4F11B60E64200F767FE /* SCKTextTypes.h */,
+				5DF9F4F21B60E64200F767FE /* SCKTextTypes.m */,
+				5DF9F4F31B60E64200F767FE /* SourceCodeKit-Info.plist */,
+				5DF9F4F41B60E64200F767FE /* SourceCodeKit-Prefix.pch */,
+				5DF9F4F51B60E64200F767FE /* SourceCodeKit.h */,
+				5D21235F1B61CC3800DC5B7A /* DDFileReader.m */,
+				5D2123611B61CC4600DC5B7A /* DDFileReader.h */,
+			);
+			path = SourceCodeKit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -288,18 +416,32 @@
 				4F4C6E4918A0599100452728 /* ChimeError.h in Headers */,
 				4FA4AF30189D92010005DA9F /* ChimeIndex.h in Headers */,
 				4FA4AF35189D93A30005DA9F /* ChimeTranslationUnit.h in Headers */,
+				5DF9F4FE1B60E64200F767FE /* SCKProject.h in Headers */,
+				5DF9F50A1B60E64200F767FE /* SourceCodeKit.h in Headers */,
+				5DF9F4F81B60E64200F767FE /* SCKClangSourceFile.h in Headers */,
+				5DF9F5091B60E64200F767FE /* SourceCodeKit-Prefix.pch in Headers */,
+				5DF9F5041B60E64200F767FE /* SCKSyntaxHighlighter.h in Headers */,
+				5DF9F4FA1B60E64200F767FE /* SCKCodeCompletionResult.h in Headers */,
+				5DF9F5021B60E64200F767FE /* SCKSourceFile.h in Headers */,
+				5DF9F4FC1B60E64200F767FE /* SCKIntrospection.h in Headers */,
+				5DF9F5001B60E64200F767FE /* SCKSourceCollection.h in Headers */,
+				5DF9F5061B60E64200F767FE /* SCKTextTypes.h in Headers */,
 				4FEC4422189F5CDF0030FF27 /* ChimeSymbol.h in Headers */,
 				4FA4AF41189DED530005DA9F /* ChimeClass.h in Headers */,
 				4F4C6E5718A0710000452728 /* ChimeCategory.h in Headers */,
+				5D2123621B61CE6D00DC5B7A /* DDFileReader.h in Headers */,
+				5D21237A1B65B43D00DC5B7A /* RegExCategories.h in Headers */,
 				4FBD3EA618A0B01E00FC0CEF /* ChimeClassExtension.h in Headers */,
 				4FEC4428189F648C0030FF27 /* NSString+ChimeFramework.h in Headers */,
 				4FA72F941899E13400AFD8B3 /* Index.h in Headers */,
+				5D2123531B60EBE500DC5B7A /* AB.h in Headers */,
 				4FA72F951899E13400AFD8B3 /* Platform.h in Headers */,
 				4FA72F931899E13400AFD8B3 /* CXString.h in Headers */,
 				4FA72F921899E13400AFD8B3 /* CXCompilationDatabase.h in Headers */,
 				4FA4AF44189DEDEE0005DA9F /* ChimeIndex_Private.h in Headers */,
 				4FEC4425189F5DAA0030FF27 /* ChimeSymbol_Private.h in Headers */,
 				4FBD3EA318A0A7D400FC0CEF /* ChimeCategory_Private.h in Headers */,
+				5D2123561B60EBE500DC5B7A /* TestCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +524,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D2123781B65B43D00DC5B7A /* LICENSE.txt in Resources */,
+				5DF9F4DB1B60E13300F767FE /* Readme in Resources */,
+				5DF9F5081B60E64200F767FE /* SourceCodeKit-Info.plist in Resources */,
+				5DF9F4F71B60E64200F767FE /* InfoPlist.strings in Resources */,
 				4FA72F9D189A30BA00AFD8B3 /* InfoPlist.strings in Resources */,
 				4F4C6E5218A0613D00452728 /* Chime.strings in Resources */,
 			);
@@ -419,14 +565,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DF9F5031B60E64200F767FE /* SCKSourceFile.m in Sources */,
 				4FA4AF36189D93A30005DA9F /* ChimeTranslationUnit.m in Sources */,
+				5DF9F5051B60E64200F767FE /* SCKSyntaxHighlighter.m in Sources */,
+				5DF9F5011B60E64200F767FE /* SCKSourceCollection.m in Sources */,
+				5D21237B1B65B43D00DC5B7A /* RegExCategories.m in Sources */,
+				5DF9F5071B60E64200F767FE /* SCKTextTypes.m in Sources */,
+				5DF9F4FB1B60E64200F767FE /* SCKCodeCompletionResult.m in Sources */,
+				5DF9F4F91B60E64200F767FE /* SCKClangSourceFile.m in Sources */,
 				4FBD3EA718A0B01E00FC0CEF /* ChimeClassExtension.m in Sources */,
+				5D2123601B61CC3800DC5B7A /* DDFileReader.m in Sources */,
+				5DF9F4FD1B60E64200F767FE /* SCKIntrospection.m in Sources */,
+				5D2123791B65B43D00DC5B7A /* readme.md in Sources */,
 				4FEC4429189F648C0030FF27 /* NSString+ChimeFramework.m in Sources */,
 				4FEC4423189F5CDF0030FF27 /* ChimeSymbol.m in Sources */,
 				4F4C6E5818A0710000452728 /* ChimeCategory.m in Sources */,
 				4FA4AF31189D92010005DA9F /* ChimeIndex.m in Sources */,
 				4FA4AF42189DED530005DA9F /* ChimeClass.m in Sources */,
 				4F4C6E4A18A0599100452728 /* ChimeError.m in Sources */,
+				5DF9F4FF1B60E64200F767FE /* SCKProject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,7 +591,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D21235B1B60EC4400DC5B7A /* AB.m in Sources */,
+				5D21235D1B60EE3000DC5B7A /* SKTest.m in Sources */,
 				4FA72F7A1899D3BF00AFD8B3 /* ChimeTests.m in Sources */,
+				5D21235A1B60EC3F00DC5B7A /* TestCommon.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +634,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				4FA72F9C189A30BA00AFD8B3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5DF9F4E11B60E64200F767FE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5DF9F4E21B60E64200F767FE /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -614,6 +782,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = .;
 				INFOPLIST_FILE = "Chime Mac Framework Tests/Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -632,6 +801,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
+				HEADER_SEARCH_PATHS = .;
 				INFOPLIST_FILE = "Chime Mac Framework Tests/Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";

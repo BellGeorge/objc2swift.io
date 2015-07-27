@@ -55,12 +55,13 @@ static NSDictionary *noAttributes;
  
 }
 
-
--(NSMutableString*)replaceOccurrencesOfString:(NSString*)str0 withString:(NSString*)str1{
-
-    NSMutableString *str =  [[NSMutableString alloc]initWithString:self.string];
-    [str replaceOccurrencesOfString:str0 withString:str1 options:0 range:NSMakeRange(0, self.string.length)];
-    return str;
+// warning - this will strip out the attributes.
+-(NSMutableAttributedString*)destroyAttributesAndReplaceOccurrencesOfString:(NSString*)str0 withString:(NSString*)str1{
+ 
+    NSMutableString *mStr = [[NSMutableString alloc]initWithString:self.string];
+    [mStr replaceOccurrencesOfString:str0 withString:str1 options:0 range:NSMakeRange(0, self.string.length)];
+    NSMutableAttributedString *newStr =[[NSMutableAttributedString alloc]initWithString:mStr];
+    return newStr;
  
 }
 // TODO - revisit this fragile category monster.
@@ -175,7 +176,7 @@ static NSDictionary *noAttributes;
 
 
 
--(NSMutableString*)parseImplementation:(NSArray*)_lines lineNumber:(NSUInteger)lineNumber{
+-(NSMutableString*)parseImplementation:(NSArray*)_lines lineNumber:(NSUInteger)lineNumber currentSuperClass:(NSString*)superClass{
      lines = _lines;
     currentLineOffset = lineNumber;
     NSMutableString *swiftSource = [[NSMutableString alloc]init];
@@ -187,13 +188,13 @@ static NSDictionary *noAttributes;
     NSString *className = [[line.string componentsSeparatedByString:@" "] objectAtIndex:1];
     className = [className stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    // delete every line / import statements above this class {
-//    [lines enumerateObjectsUsingBlock:^(NSMutableDictionary *d1, NSUInteger idx, BOOL *stop) {
-//        if (idx < lineNumber) {
-//           [d1 setObject:[NSNumber numberWithInt:1] forKey:kIsLineDeleted];
-//        }
-//    }];
-    NSString *swift = [NSString stringWithFormat:@"class %@ {\r",className];
+
+     NSString *swift = @"";
+    if (superClass) {
+        swift = [NSString stringWithFormat:@"class %@ : %@ {\r",className,superClass];
+    }else{
+         swift = [NSString stringWithFormat:@"class %@ {\r",className];
+    }
     [swiftSource appendString:swift];
 
     // process the subsequent lines for vars.
@@ -373,7 +374,7 @@ static NSDictionary *noAttributes;
         
         
         NSMutableAttributedString *line = d0[kAttributeString];
-        NSMutableDictionary *currentSuperclass;
+        NSMutableDictionary *superClassDictionnary;
         
         // CRUDE PASS
         if ([line.string containsString:@"#import"]){
@@ -381,17 +382,18 @@ static NSDictionary *noAttributes;
         }
         
         if ([line.string containsString:@"@interface"]) {
-            currentSuperclass =   [self superClassAndIVarsForInterface:source.lines lineNumber:idx];
-            NSLog(@"currentSuperclass:%@",currentSuperclass);
+            superClassDictionnary =   [self superClassAndIVarsForInterface:source.lines lineNumber:idx];
+            NSLog(@"currentSuperclass:%@",superClassDictionnary);
 
         }
         if ([line.string containsString:@"@implementation"]) {
-            NSMutableString* headerCode =   [self parseImplementation:source.lines lineNumber:idx];
+            NSString *superClass = [superClassDictionnary valueForKey:@"superClass"];
+            NSMutableString* headerCode =   [self parseImplementation:source.lines lineNumber:idx currentSuperClass:superClass];
             [d0 setObject: [[NSMutableAttributedString alloc]initWithString:headerCode] forKey:kAttributeString];
 
         }
          if ([line.string containsString:@"#pragma mark"]) {
-             [d0 setObject:[line replaceOccurrencesOfString:@"#pragma mark" withString:@"//MARK "]  forKey:kAttributeString];
+             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@"#pragma mark" withString:@"//MARK "]  forKey:kAttributeString];
          }
         
         

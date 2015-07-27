@@ -22,7 +22,7 @@ static NSDictionary *noAttributes;
 @interface NSMutableAttributedString (addons)
 -(NSMutableArray*)lines;
 -(void)updateAttributeAtLine:(NSInteger)line attributeString:(NSMutableAttributedString*)attributeString;
--(void)removeRowAtIndex:(NSUInteger)rowIndex;
+//-(void)removeRowAtIndex:(NSUInteger)rowIndex;
 -(NSMutableString*)replaceOccurrencesOfString:(NSString*)str0 withString:(NSString*)str1;
 @property (nonatomic, strong) id associatedObject;
 @end
@@ -47,13 +47,14 @@ static NSDictionary *noAttributes;
       [d0 setObject:aStr forKey:kAttributeString];
 
 }
--(void)removeRowAtIndex:(NSUInteger)rowIndex{
-    if (self.lines.count < rowIndex){
-        NSMutableDictionary *d0 =  [self.lines objectAtIndex:rowIndex];
-        [d0 setObject:[NSNumber numberWithInt:1] forKey:kIsLineDeleted];
-    }
- 
-}
+// has a bug
+//-(void)removeRowAtIndex:(NSUInteger)rowIndex{
+//    if (self.lines.count < rowIndex){
+//        NSMutableDictionary *d0 =  [self.lines objectAtIndex:rowIndex];
+//        [d0 setObject:@1 forKey:kIsLineDeleted];
+//    }
+// 
+//}
 
 // warning - this will strip out the attributes.
 -(NSMutableAttributedString*)destroyAttributesAndReplaceOccurrencesOfString:(NSString*)str0 withString:(NSString*)str1{
@@ -289,12 +290,15 @@ static NSDictionary *noAttributes;
             }
             
             if ([line.string containsString:@"@implementation"]) {
-                *stop0 = YES;
+                *stop0 = YES; //don't delete it will be handle by subsequnt methods
             }
             if ([line.string containsString:@"@end"]) {
                 [dc setObject:@1 forKey:kIsLineDeleted];
                 *stop0 = YES;
             }
+           
+            
+            
             
             if ([line.string containsString:@"{"]) {
                 
@@ -357,7 +361,8 @@ static NSDictionary *noAttributes;
                 [d0 setObject: [[NSMutableAttributedString alloc]initWithString:swiftSource] forKey:kAttributeString];
     
        }else{
-           [attStr removeRowAtIndex:currentLineOffset]; // eg. #import "AbstractOSXCell.h"
+
+           [d0 setObject:@1 forKey:kIsLineDeleted];// eg. #import "AbstractOSXCell.h"
        }
 
   
@@ -376,24 +381,53 @@ static NSDictionary *noAttributes;
         NSMutableAttributedString *line = d0[kAttributeString];
         NSMutableDictionary *superClassDictionnary;
         
-        // CRUDE PASS
+        // CRUDE 1st PASS
         if ([line.string containsString:@"#import"]){
             [self fixImportStatement:source lineNumber:idx];
+            return;
         }
+        
+        if ([line.string containsString:@"#define"]) {
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+        }
+        if ([line.string containsString:@"@end"]){
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            return;
+        }
+        
+        // TODO - call super
+        if ([line.string containsString:@"self ="]){
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            return;
+        }
+        if ([line.string containsString:@"return self"]){
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            return;
+        }
+        
+        // TODO handle with regex to rip ivars
+        if ([line.string containsString:@"@property"]){
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            return;
+        }
+        
         
         if ([line.string containsString:@"@interface"]) {
             superClassDictionnary =   [self superClassAndIVarsForInterface:source.lines lineNumber:idx];
             NSLog(@"currentSuperclass:%@",superClassDictionnary);
+            return;
 
         }
         if ([line.string containsString:@"@implementation"]) {
             NSString *superClass = [superClassDictionnary valueForKey:@"superClass"];
             NSMutableString* headerCode =   [self parseImplementation:source.lines lineNumber:idx currentSuperClass:superClass];
             [d0 setObject: [[NSMutableAttributedString alloc]initWithString:headerCode] forKey:kAttributeString];
+            return;
 
         }
          if ([line.string containsString:@"#pragma mark"]) {
              [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@"#pragma mark" withString:@"//MARK "]  forKey:kAttributeString];
+            return;
          }
         
         
@@ -424,9 +458,14 @@ static NSDictionary *noAttributes;
 
     }];
     
-    source = source.cookedAttributeText;
-
+    source = source.cookedAttributeText; // using the category helper - we have preserved original source - but ripped out some text. It's been cooked.
+   // NSLog(@"cooked Text:%@",source);
     
+    
+    
+    
+    
+    // THIS CODE IS PROCESSING ENTIRE CHUNK OF SOURCE CODE - IT'S NOT LINE BY LINE.....
     if (source == nil) {
         return @"";
     }
@@ -483,24 +522,25 @@ static NSDictionary *noAttributes;
         }else if ([token isEqualToString:SCKTextTokenTypeComment]) {
             [self ripOutStuff:attrs source:source range:r];
         }else if ([token isEqualToString:SCKTextTokenTypePunctuation]) {
-            [self ripOutStuffForPunctuation:attrs source:source range:r];
+            // TODO perform regex here -
+            [self ripOutStuffForPunctuation:attrs source:source range:r]; // this is currently destroying the alloc]init] brackets.
         }else{
               [source setAttributes:attrs range:r];
         }
         
         // Re-apply the diagnostic
-        if (nil != diagnostic)
-        {
-            [source addAttribute:NSToolTipAttributeName
-                           value:[diagnostic objectForKey: kSCKDiagnosticText]
-                           range:r];
-            [source addAttribute:NSUnderlineStyleAttributeName
-                           value:[NSNumber numberWithInt: NSSingleUnderlineStyle]
-                           range:r];
-            [source addAttribute:NSUnderlineColorAttributeName
-                           value:[NSColor redColor]
-                           range:r];
-        }
+//        if (nil != diagnostic)
+//        {
+//            [source addAttribute:NSToolTipAttributeName
+//                           value:[diagnostic objectForKey: kSCKDiagnosticText]
+//                           range:r];
+//            [source addAttribute:NSUnderlineStyleAttributeName
+//                           value:[NSNumber numberWithInt: NSSingleUnderlineStyle]
+//                           range:r];
+//            [source addAttribute:NSUnderlineColorAttributeName
+//                           value:[NSColor redColor]
+//                           range:r];
+//        }
     } while (i < end);
     
     [[source  copy] enumerateAttributesInRange:NSMakeRange(0, source.length) options:NSAttributedStringEnumerationReverse  usingBlock:^(NSDictionary* attrs, NSRange range, BOOL *stop) {

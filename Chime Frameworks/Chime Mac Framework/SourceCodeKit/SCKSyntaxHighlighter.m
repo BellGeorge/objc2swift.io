@@ -444,8 +444,24 @@ static NSDictionary *noAttributes;
                 NSArray *arr1 = [str0 componentsSeparatedByString:@" "];
                 NSString *receiver = arr1[0];
                 NSString *method = arr1[1];
-                NSString *swift = [NSString stringWithFormat:@"%@.%@(%@)\r", receiver, method, message];
-                [swiftSource appendString:swift];
+                // convert to modern objective c syntax
+                if ([[method substringToIndex:3]isEqualToString:@"set"]) {
+                    NSString *modernMethod0 = [method substringWithRange:NSMakeRange(3, [method length] - 3)];
+                    
+                    NSString *firstLetter = [modernMethod0 substringToIndex:1];
+                    firstLetter = [firstLetter lowercaseString];
+                    NSString *modernMethod = [modernMethod0 substringWithRange:NSMakeRange(1, [method length] - 1)];
+                    NSMutableString *m = [[NSMutableString alloc]init];
+                    [m appendString:firstLetter];
+                    [m appendString:modernMethod];
+                    
+                    NSString *swift = [NSString stringWithFormat:@"%@.%@ = %@\r", receiver, m, message];
+                    [swiftSource appendString:swift];
+                }
+                else {
+                    NSString *swift = [NSString stringWithFormat:@"%@.%@(%@)\r", receiver, method, message];
+                    [swiftSource appendString:swift];
+                }
             }
             else { //multiple parameter passing.
                 [params enumerateObjectsUsingBlock: ^(NSString *param, NSUInteger idx, BOOL *__nonnull stop) {
@@ -609,10 +625,10 @@ static NSDictionary *noAttributes;
     
     
     if ([[mStr substringToIndex:1]isEqualToString:@"+"]) {
-        [swiftSource appendString:@"class func "];
+        [swiftSource appendString:@"\rclass func "];
     }
     else {
-        [swiftSource appendString:@"func "];
+        [swiftSource appendString:@"\rfunc "];
     }
     
     if ([mStr containsString:@"initWith"]) {
@@ -730,6 +746,10 @@ static NSDictionary *noAttributes;
             [self fixImportStatement:source lineNumber:idx];
             return;
         }
+        if ([line.string containsString:@"static"]) {
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            return;
+        }
         //
         if ([line.string containsString:@"@class"]) {
             [d0 setObject:@1 forKey:kIsLineDeleted];
@@ -752,6 +772,12 @@ static NSDictionary *noAttributes;
             [d0 setObject:@1 forKey:kIsLineDeleted];
             return;
         }
+        
+        if ([[line.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] containsString:@"self!=nil"]) {
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            return;
+        }
+        
         
         
         // TODO - call super / parse message sends

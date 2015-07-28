@@ -352,8 +352,9 @@ static NSDictionary *noAttributes;
         NSString *str = arr0[1];          //QuartzCore/QuartzCore.h>"
         NSArray *arr1 = [str componentsSeparatedByString:@"/"];         //  QuartzCore ,QuartzCore.h>
         NSString *str2 = arr1[0];
-        [swiftSource appendString:@"Import @\r\r"];
+        [swiftSource appendString:@"Import @"];
         [swiftSource appendString:str2];
+        [swiftSource appendString:@"\r"];
         [d0 setObject:[[NSMutableAttributedString alloc]initWithString:swiftSource] forKey:kAttributeString];
     }
     else {

@@ -407,7 +407,9 @@ static NSDictionary *noAttributes;
     NSMutableString *swiftSource = [[NSMutableString alloc]init];
     NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber];
     NSMutableAttributedString *line = d0[kAttributeString];
-    //NSArray *
+    
+    
+    //NSArray * HACK - inject let
     if ([line.string containsString:@"="]) {
         NSArray *arr = [line.string componentsSeparatedByString:@"="];
         NSString *def = arr[0];
@@ -418,8 +420,6 @@ static NSDictionary *noAttributes;
             NSString *swiftDef = [NSString stringWithFormat:@"let %@:%@ =",var,type];
             [swiftSource appendString:swiftDef];
         }
-        
-        
     }
     
     [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult *match, NSUInteger idx, BOOL * __nonnull stop) {
@@ -427,27 +427,57 @@ static NSDictionary *noAttributes;
         NSLog(@">: %@", matchText);
         [matchText replaceOccurrencesOfString:@"[" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
         [matchText replaceOccurrencesOfString:@"]" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
+        [matchText replaceOccurrencesOfString:@"  " withString:@" " options:0 range:NSMakeRange(0, matchText.length)];
+        
         NSArray *params = [matchText componentsSeparatedByString:@":"];
-        //TODO
-        
-        NSArray *arr = [matchText componentsSeparatedByString:@" "];
-        if([matchText containsString:@"alloc"]){
-            NSString *str = arr[0];  // NSTrackingArea alloc -> NSTrackingArea,alloc  //[Foo alloc] --> Foo
-            [swiftSource appendString:str];
-        }else  if([matchText containsString:@"init"]){
-            NSString *str = [NSString stringWithFormat:@"%@()\r",arr[0]]; //[Foo init]  --> Foo()
-            [swiftSource appendString:str];
-        }else{ // [Foo bar] --> Foo.bar()
-            if (arr.count>1) {
-                NSString *str = [NSString stringWithFormat:@"%@.%@()\r",arr[0],arr[1]]; //[Foo init]  --> Foo()
+       
+
+        // HACKY
+        if (params.count == 0){
+            NSArray *arr = [matchText componentsSeparatedByString:@" "];
+            if([matchText containsString:@"alloc"]){
+                NSString *str = arr[0];  // NSTrackingArea alloc -> NSTrackingArea,alloc  //[Foo alloc] --> Foo
                 [swiftSource appendString:str];
+            }else  if([matchText containsString:@"init"]){
+                NSString *str = [NSString stringWithFormat:@"%@()\r",arr[0]]; //[Foo init]  --> Foo()
+                [swiftSource appendString:str];
+            }else{ // [Foo bar] --> Foo.bar()
+                if (arr.count>1) {
+                    NSString *str = [NSString stringWithFormat:@"%@.%@()\r",arr[0],arr[1]]; //[Foo init]  --> Foo()
+                    [swiftSource appendString:str];
+                }else{
+                    [swiftSource appendString:@"\r"];
+                }
             }
+        }else   if (params.count == 2){
+            NSString *message = params[1]; //r0
+            NSString *str0 = params[0]; //source attributedSubstringFromRange
+            NSArray *arr1 = [str0 componentsSeparatedByString:@" "];
+            NSString *receiver = arr1[0];
+            NSString *method = arr1[1];
+            NSString *swift = [NSString stringWithFormat:@"%@.%@(%@)\r",receiver,method,message];
+            [swiftSource appendString:swift];
+
+        }else{ //multiple parameter passing.
            
+            [params enumerateObjectsUsingBlock:^(NSString *param, NSUInteger idx, BOOL * __nonnull stop) {
+                NSLog(@"param:%@",param);
+                
+                NSString *message = params[1]; //r0
+                NSString *str0 = params[0]; //source attributedSubstringFromRange
+                NSArray *arr1 = [str0 componentsSeparatedByString:@" "];
+                NSString *receiver = arr1[0];
+                NSString *method = arr1[1];
+                
+               
+                
+            }];
+            
         }
-        
         
     }];
     
+    NSLog(@"----------%@",swiftSource);
     return swiftSource;
     
 
@@ -555,41 +585,47 @@ static NSDictionary *noAttributes;
     
     
   
-    NSMutableArray *t = [NSMutableArray array];
+    NSMutableArray *types = [NSMutableArray array]; //types
+    NSMutableArray *vars = [NSMutableArray array]; //variables
+    NSMutableArray *toTrash = [NSMutableArray array];
+    
     __block NSString *returnType = @"";
-    NSArray *types =[self matchesRegExpression:@"\\([^()]*\\)" searchString:mStr];   // REGEX = \([^()]*\)
+    NSArray *typeMatches =[self matchesRegExpression:@"\\([^()]*\\)" searchString:mStr];   // REGEX = \([^()]*\)
     //- (BOOL)tableView:(NSTableView )tableView isGroupRow:(NSInteger)row ->  returnType BOOL  [NSTableView,NSInteger]
-    [types enumerateObjectsUsingBlock:^(NSTextCheckingResult *match, NSUInteger idx, BOOL * __nonnull stop) {
+    [typeMatches enumerateObjectsUsingBlock:^(NSTextCheckingResult *match, NSUInteger idx, BOOL * __nonnull stop) {
         NSMutableString* matchText = [NSMutableString stringWithString:[mStr substringWithRange:[match range]]];
-       
+        [toTrash addObject:matchText.copy];
          [matchText replaceOccurrencesOfString:@"(" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
         [matchText replaceOccurrencesOfString:@")" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
-        NSString *type = [self convertType:matchText];
         
+        NSString *type = [self convertType:matchText];
+        NSLog(@"type:%@",type);
         if (idx == 0) {
             returnType = type;
         }else{
-           [t addObject:type]; //(NSTableView ) ->  NSTableView
+            [types addObject:[type stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]]; //(NSTableView ) ->  NSTableView
+       
         }
-      //   NSLog(@"type:%@",type);
+
+    }];
+    // rip out the type (NSTableView ) -> ""
+    NSMutableString *varString = [NSMutableString stringWithString:mStr];
+    [toTrash enumerateObjectsUsingBlock:^(NSString *trashString, NSUInteger idx, BOOL * __nonnull stop) {
+          [varString replaceOccurrencesOfString:trashString withString:@"" options:0 range:NSMakeRange(0, varString.length)];
     }];
     
-    // TODO - make this pretty.
-    NSMutableArray *vars = [NSMutableArray arrayWithArray:[mStr componentsSeparatedByString:@")"]];
-    [vars enumerateObjectsUsingBlock:^(NSString *var, NSUInteger idx, BOOL * __nonnull stop) {
-        if (idx ==0) {
-            return; // return type
-        }
-        NSArray *mVar = [var componentsSeparatedByString:@" "];
-        if (mVar.count) {
-            [vars addObject:[mVar objectAtIndex:0]];
-            NSLog(@"mVar%@",[mVar objectAtIndex:0]);
-        }else{
-            [vars addObject:var];
-              NSLog(@"mVar%@",var);
-        }
+    //extract the variable names.
+    //initWithFrame:frame navDelegate:_navDelegate row:row ->  :frame, :_navDelegate, :row
+    NSArray *varMatches =[self matchesRegExpression:@"[:]\\w*" searchString:varString];
+    [varMatches enumerateObjectsUsingBlock:^(NSTextCheckingResult *match, NSUInteger idx, BOOL * __nonnull stop) {
+        NSMutableString* matchText = [NSMutableString stringWithString:[varString substringWithRange:[match range]]];
+        [matchText replaceOccurrencesOfString:@":" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
+        
+        [vars addObject:[matchText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        NSLog(@"var:%@",matchText);
     }];
     
+  
     
     
     if([[mStr substringToIndex:1]isEqualToString:@"+"]){
@@ -610,64 +646,57 @@ static NSDictionary *noAttributes;
         NSString *str1 = arr1[0]; // Frame
         NSMutableString *param0 = [NSMutableString stringWithString:str1];
         [param0 replaceCharactersInRange:NSMakeRange(0, 1) withString:firstLetter]; // Frame -> frame
-        if (t.count == 1) {
-            NSString *init = [NSString stringWithFormat:@"init(%@:%@)\r",param0,t[0]];
+        if (types.count == 1) {
+            NSString *init = [NSString stringWithFormat:@"init(%@:%@)\r",param0,types[0]];
             [swiftSource appendString:init];
         }else{
-            NSMutableString *init = [NSMutableString stringWithFormat:@"init(%@:%@",param0,t[0]];
-            [t enumerateObjectsUsingBlock:^(NSString *type, NSUInteger idx, BOOL * __nonnull stop) {
+            NSMutableString *init = [NSMutableString stringWithFormat:@"init(%@:%@",param0,types[0]];
+            [types enumerateObjectsUsingBlock:^(NSString *type, NSUInteger idx, BOOL * __nonnull stop) {
+                if (idx ==0) {
+                    return;
+                }
                 NSString *str = [NSString stringWithFormat:@",%@:%@",vars[idx],type];
                 [init appendString:str];
             }];
             
             [swiftSource appendString:init];
-            [swiftSource appendString:@")\r"];
+            [swiftSource appendString:@")\r{"];
             
         }
     }else{
         
+        // eg. - (NSString*)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection
+        NSLog(@"mStr:%@ t:%@,v:%@",mStr ,types,vars);
+        NSArray *arr = [mStr componentsSeparatedByString:@":"]; //- (NSString*)convertToSwiftSource
+        NSString *str = arr[0];
+        BOOL isVoidReturnType = NO;
+        if([str containsString:@"void"]){
+            isVoidReturnType = YES;
+        }
+        NSArray *arr1 = [str componentsSeparatedByString:@")"];
+        NSString *methodName0 = arr1[1]; //convertToSwiftSource
+        NSLog(@"methodName:%@",methodName0);
         
-        
-        // find a method
-        /*NSArray *arr =[self matchesRegExpression:@"[+-]\\s*\\(([^)]+)\\)(?:\\s*(\\w+):\\s*\\(([^)]+)\\)\\s*(\\w+))+" searchString:mStr];
-        [arr enumerateObjectsUsingBlock:^(NSTextCheckingResult *match, NSUInteger idx, BOOL * __nonnull stop) {
-            NSMutableString* matchText = [NSMutableString stringWithString:[mStr substringWithRange:[match range]]];
-            NSLog(@"1| %@", matchText);
-            NSArray *arr1 = [matchText componentsSeparatedByString:@")"];
-            NSString *str1 = arr1[1];
-            if ([arr1[0] containsString:@"void"]) {
-                NSString *str = [NSString stringWithFormat:@"%@\r{\r",str1];
-                [swiftSource appendString:str];
-            }else{
-                NSString *type = [self convertType:arr1[0]];
-                NSString *str = [NSString stringWithFormat:@"%@() -> %@\r{\r",str1,type];
-                [swiftSource appendString:str];
-            }
-            
-            
+        NSArray *arr2 = [methodName0 componentsSeparatedByString:@" "]; //)isFlipped {
+        NSMutableString *methodName1 = [NSMutableString stringWithString:arr2[0]]; //
+        [methodName1 replaceOccurrencesOfString:@"{" withString:@"" options:0 range:NSMakeRange(0, methodName1.length)];
+        methodName1 = [NSMutableString stringWithString:[methodName1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        // add in params
+        NSMutableString *init = [NSMutableString stringWithFormat:@"%@(",methodName1];
+        [types enumerateObjectsUsingBlock:^(NSString *type, NSUInteger idx, BOOL * __nonnull stop) {
+            NSString *str2 = [NSString stringWithFormat:@"%@:%@",vars[idx],type];
+            [init appendString:str2];
         }];
-        if (!arr.count){
-            
-            // we should just add () for this condition    - (void)dealloc -> func dealloc()
-            arr =[self matchesRegExpression:@"[+-]\\s*\\(([^)]+)\\)\\s*(\\w+)" searchString:mStr];
-            [arr enumerateObjectsUsingBlock:^(NSTextCheckingResult *match, NSUInteger idx, BOOL * __nonnull stop) {
-                NSMutableString* matchText = [NSMutableString stringWithString:[mStr substringWithRange:[match range]]];
-                NSLog(@"2| %@", matchText);
-                NSArray *arr1 = [matchText componentsSeparatedByString:@")"];
-                NSString *str1 = arr1[1];
-                if ([arr1[0] containsString:@"void"]) {
-                    NSString *str = [NSString stringWithFormat:@"%@()\r{\r",str1];
-                    [swiftSource appendString:str];
-                }else{
-                    NSString *type = [self convertType:arr1[0]];
-                    NSString *str = [NSString stringWithFormat:@"%@() -> %@\r{\r",str1,type];
-                    [swiftSource appendString:str];
-                }
-                
-            }];
-            
-        }*/
+        [init appendString:@")"];
+        [swiftSource appendString:init];
+
         
+        if (!isVoidReturnType) {
+            [swiftSource appendString:@"->"];
+            [swiftSource appendString:returnType];
+        }
+        
+        [swiftSource appendString:@"\r{"];
         
         // TODO INSPECT NEXT LINE FOR //\s+(\w+):\s*\((.+)\)\s*(\w+) - find parameters on next line
     }
@@ -740,7 +769,7 @@ static NSDictionary *noAttributes;
             return;
         }
         if ([line.string containsString:@"@end"]){
-            [d0 setObject:@1 forKey:kIsLineDeleted];
+             [d0 setObject:[[NSMutableAttributedString alloc]initWithString:@"}\r"]  forKey:kAttributeString];
             return;
         }
         
@@ -797,24 +826,24 @@ static NSDictionary *noAttributes;
         
         if ([line.string containsString:@";"]) {
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@";" withString:@""]  forKey:kAttributeString];
-            return;
+
         }
         
         if ([line.string containsString:@" YES"]) {
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@" YES" withString:@" true"]  forKey:kAttributeString];
-            return;
+
         }
         if ([line.string containsString:@" NO"]) {
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@" NO" withString:@" false"]  forKey:kAttributeString];
-            return;
+
         }
         if ([line.string containsString:@"NSLog"]) {
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@"NSLog" withString:@"print"]  forKey:kAttributeString];
-            return;
+
         }
         if ([line.string containsString:@"@"]) {
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@"@" withString:@""]  forKey:kAttributeString];
-            return;
+
         }
         
 
@@ -841,11 +870,6 @@ static NSDictionary *noAttributes;
             return;
         }
 
-        
-       
-        
-        
-        
         
         @try {
             

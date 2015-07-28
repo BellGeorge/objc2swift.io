@@ -419,6 +419,8 @@ static NSDictionary *noAttributes;
             NSString *var = arr1[1];
             NSString *swiftDef = [NSString stringWithFormat:@"let %@:%@ =",var,type];
             [swiftSource appendString:swiftDef];
+        }else{
+            [swiftSource appendString:def];
         }
     }
     
@@ -462,12 +464,12 @@ static NSDictionary *noAttributes;
            
             [params enumerateObjectsUsingBlock:^(NSString *param, NSUInteger idx, BOOL * __nonnull stop) {
                 NSLog(@"param:%@",param);
-                
-                NSString *message = params[1]; //r0
-                NSString *str0 = params[0]; //source attributedSubstringFromRange
-                NSArray *arr1 = [str0 componentsSeparatedByString:@" "];
-                NSString *receiver = arr1[0];
-                NSString *method = arr1[1];
+//                
+//                NSString *message = params[1]; //r0
+//                NSString *str0 = params[0]; //source attributedSubstringFromRange
+//                NSArray *arr1 = [str0 componentsSeparatedByString:@" "];
+//                NSString *receiver = arr1[0];
+//                NSString *method = arr1[1];
                 
                
                 

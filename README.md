@@ -34,8 +34,8 @@ using array/dictionary literals and bracket-accesses; these will then be usable 
 | Compiler Directives                                           |                                                                                                                    |        |
 | #import module.h                                              | Obj-C modules: Include in ...-Bridging-Header.h Project modules: DeleteFrameworks: import module                   | OK     |
 | #define macroName value                                       | let macroName = value                                                                                              | TODO   |
-| More complex#define / #ifdef / #ifndef                        | N/A                                                                                                                | REMOVED|
-| #elif value                                                   | #elseif value                                                                                                      | REMOVED|
+| More complex#define / #ifdef / #ifndef                        | N/A                                                                                                                | OK     |
+| #elif value                                                   | #elseif value                                                                                                      | OK     |
 | #pragma mark sectionName                                      | // MARK: sectionName (not implemented yet)                                                                         | OK     |
 | NSAssert(conditon,description)                                | assert(condition, description)                                                                                     | TODO   |
 | Types                                                         |                                                                                                                    |        |
@@ -53,7 +53,7 @@ using array/dictionary literals and bracket-accesses; these will then be usable 
 | -(IBAction) methodName                                        | @IBAction func methodName                                                                                          | TODO   |
 | #ERROR!                                                       | class func methodName() -> TypeName                                                                                | TODO   |
 | ...methodName: (Type1) param1 b: (Type2) param2               | ...methodName(param: Type1 b param2: Typ2)                                                                         | TODO   |
-| method overriden from superclass                              | add override                                                                                                       |        |
+| method overriden from superclass                              | add override                                                                                                       | TODO   |
 | Variables                                                     |                                                                                                                    |        |
 | TypeName varName = value                                      | var (OR let) name = value OR var (OR let) name: TypeName if necessary                                              |  OK    |
 | Object Creation                                               |                                                                                                                    |        |

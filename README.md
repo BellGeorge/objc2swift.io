@@ -14,8 +14,9 @@ Fire up app - open existing workspace / project
 Auto conversion of code into swift
 
 
-IMPORTANT -
+
 Conversion Process from Objective-C syntax to Swift 
+===================================
 The most important first step is to run Apple's "Convert to Modern Objective-C Syntax" refactoring, so that you're 
 using array/dictionary literals and bracket-accesses; these will then be usable in Swift. 
 

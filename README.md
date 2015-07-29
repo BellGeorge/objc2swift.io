@@ -14,7 +14,7 @@ The most important first step is to run Apple's "Convert to Modern Objective-C S
 using array/dictionary literals and bracket-accesses; these will then be usable in Swift. 
 
 
-| When you see this pattern                                     | Replace with this                                                                                                  | STATUS |
+| Detected pattern                                              | Will be Replaced by this                                                                                           | STATUS |
 |---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|--------|
 | Module                                                        |                                                                                                                    |        |
 | @interface *newType* : *superType* <*protocol1*, *protocol2*> | class *newType* : *superType*, *protocol1*, *protocol2*                                                            | OK     |

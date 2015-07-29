@@ -404,6 +404,15 @@ static NSMutableDictionary *varsForHeader;
             NSString *var = [arr1[1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             NSString *swiftDef = [NSString stringWithFormat:@"let %@:%@ =", var, type];
             [swiftSource appendString:swiftDef];
+        }else{
+            NSString *leftSide = arr[0];
+            NSArray* matches = [RX(@"\\w+") matches:leftSide];
+            if (matches.count ==2) {
+                //cgpoint pt =
+                NSString *swiftDef = [NSString stringWithFormat:@"let %@:%@ =", matches[1], matches[0]];
+                [swiftSource appendString:swiftDef];
+            }
+            
         }
     }
     
@@ -835,16 +844,16 @@ static NSMutableDictionary *varsForHeader;
     else {
         [swiftSource appendString:@"\rfunc "];
     }
-    BOOL hasOuterbrace = NO;
+    BOOL hasOuterBracket = NO;
     if ([mStr containsString:@"{"]) { // at the end of line
-        hasOuterbrace = YES;
+        hasOuterBracket = YES;
     }else{
         NSMutableDictionary *d0 = [attStr.lines objectAtIndex:lineNumber+1];
         NSMutableAttributedString *line1 = d0[kAttributeString];
         NSString *trimString =     [line1.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if ([trimString isEqualToString:@"{"]) {
             [d0 setObject:@1 forKey:kIsLineDeleted];
-            hasOuterbrace = NO;
+            hasOuterBracket = NO;
         }
     }
     
@@ -855,7 +864,7 @@ static NSMutableDictionary *varsForHeader;
     }
     else {
         // eg. - (NSString*)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection
-        NSLog(@"mStr:%@ t:%@,v:%@", mStr, types, vars);
+        NSLog(@"filename:%@ mStr:%@ t:%@,v:%@", filename.lastPathComponent,mStr, types, vars); //filename
         NSArray *arr = [mStr componentsSeparatedByString:@":"]; //- (NSString*)convertToSwiftSource
         NSString *str = arr[0];
         BOOL isVoidReturnType = NO;
@@ -876,9 +885,10 @@ static NSMutableDictionary *varsForHeader;
             
             NSString *str2 = [NSString stringWithFormat:@"%@:%@", vars[idx], type];
             [init appendString:str2];
-            if (idx < types.count && types.count !=1) {
+            if (idx +1< types.count) {
                 [init appendString:@","];
             }
+            
         }];
         [init appendString:@")"];
         [swiftSource appendString:init];
@@ -889,8 +899,8 @@ static NSMutableDictionary *varsForHeader;
             [swiftSource appendString:returnType];
         }
         
-        if (!hasOuterbrace) {
-            [swiftSource appendString:@"\r{\r"];
+        if (!hasOuterBracket) {
+            [swiftSource appendString:@"{\r"];
         }else{
             [swiftSource appendString:@"\r"];
         }
@@ -909,6 +919,8 @@ static NSMutableDictionary *varsForHeader;
     [self convertToSwiftSource:file sourceCollection:nil isHeader:YES];
 }
 - (NSString *)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection isHeader:(BOOL)bHeader {
+    
+    filename = file.fileName;
     
     NSMutableAttributedString *source = file.source;
     
@@ -941,13 +953,10 @@ static NSMutableDictionary *varsForHeader;
                     [line deleteCharactersInRange:range];
                 if ([token isEqualToString:SCKTextTokenTypeIdentifier]) {
                     
-                    
-                    
                     if ([mLine containsString:@"@interface"]) {
-                        currentInterface = [self convertInterfaceToVars:line lineNumber:idx];
+                        currentInterface = [self convertInterfaceToVars:line lineNumber:idx]; // this is going to read ahead and mark subsequent lines as deleted until it hits @end
                         return;
                     }
-                    
                     
                     if ([line.string containsString:@"-"]
                         ||[line.string containsString:@"+"]
@@ -1036,15 +1045,24 @@ static NSMutableDictionary *varsForHeader;
             [d0 setObject:@1 forKey:kIsLineDeleted];
             return;
         }
+        // attempt ->
         if ([line.string containsString:@"#define"]) {
-            [d0 setObject:@1 forKey:kIsLineDeleted];
+            Rx* rx = [[Rx alloc] initWithPattern:@"\\w+"];
+            NSArray *arr = [rx  matches:line.string];
+            if (arr.count == 3) {
+                NSString *def = [NSString stringWithFormat:@"let %@ = %@",arr[1],arr[2]];
+                [d0 setObject:def forKey:kAttributeString];
+            }else{
+                [d0 setObject:@1 forKey:kIsLineDeleted];
+            }
+            
             return;
         }
         if ([line.string containsString:@"@end"]) {
             [d0 setObject:[[NSMutableAttributedString alloc]initWithString:@"}\r"]  forKey:kAttributeString];
             return;
         }
-        
+        // Attempt to clean up self = {super init!=nil dance.
         if ([line.string containsString:@"if (self"]) {
             [d0 setObject:@1 forKey:kIsLineDeleted];
             return;
@@ -1054,8 +1072,6 @@ static NSMutableDictionary *varsForHeader;
             [d0 setObject:@1 forKey:kIsLineDeleted];
             return;
         }
-        
-        
         
         // TODO - call super / parse message sends
         if ([line.string containsString:@"self ="]) {
@@ -1082,7 +1098,7 @@ static NSMutableDictionary *varsForHeader;
         // DETECT INTERFACE / IMPLEMENTATION.
         if ([line.string containsString:@"@interface"]) {
             superClassDictionnary =   [self superClassAndIVarsForInterface:source.lines lineNumber:idx];
-            NSLog(@"currentSuperclass:%@", superClassDictionnary);
+            NSLog(@"currentSuperclass:%@ %@", superClassDictionnary,filename.lastPathComponent);
             return;
         }
         if ([line.string containsString:@"@implementation"]) {
@@ -1107,6 +1123,7 @@ static NSMutableDictionary *varsForHeader;
         if ([line.string containsString:@" YES"]) {
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@" YES" withString:@" true"]  forKey:kAttributeString];
         }
+        
         if ([line.string containsString:@" NO"]) {
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@" NO" withString:@" false"]  forKey:kAttributeString];
         }
@@ -1117,10 +1134,13 @@ static NSMutableDictionary *varsForHeader;
             [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@"@" withString:@""]  forKey:kAttributeString];
         }
         
+        if ([line.string containsString:@"dealloc"]) {
+            [d0 setObject:[line destroyAttributesAndReplaceOccurrencesOfString:@"dealloc" withString:@"deinit"]  forKey:kAttributeString];
+        }
         
         // introduce let / var
         
-        if ([line.string containsString:@"="]) {
+        if ([line.string containsString:@"="]) { // this has a bug
             [self convertDefinitions:line lineNumber:idx];
         }
         
@@ -1163,6 +1183,8 @@ static NSMutableDictionary *varsForHeader;
                 if (range.length == 0) {
                     return;
                 }
+                
+                
                 if ([semantic isEqualToString:SCKObjCClassMethodDecl]) {
                     // NSLog(@"SCKObjCClassMethodDecl:%@",attrs);
                     // NSLog(@"SCKObjCClassMethodDecl:%@ string:%@",[line attributedSubstringFromRange:range] ,line.string);
@@ -1207,94 +1229,7 @@ static NSMutableDictionary *varsForHeader;
         return @"";
     }
     source = source.cookedAttributeText; // using the category helper - we have preserved original source - but ripped out some text. It's been cooked.
-    // NSLog(@"cooked Text:%@",source);
     
-    
-    
-    
-    // THIS CODE IS PROCESSING ENTIRE CHUNK OF SOURCE CODE - IT'S NOT LINE BY LINE.....
-    /* if (source == nil) {
-     return @"";
-     }
-     
-     NSUInteger end = [source length];
-     if (end == 0) {
-     return @"";
-     }
-     NSUInteger i = 0;
-     
-     NSRange r;
-     do
-     {
-     NSRange range = NSMakeRange(i, end-i);
-     
-     NSDictionary *attrs = [source attributesAtIndex:i    longestEffectiveRange:&r   inRange:range];
-     i = r.location + r.length;
-     
-     NSString *token = [attrs objectForKey:kSCKTextTokenType];
-     NSString *semantic = [attrs objectForKey:kSCKTextSemanticType];
-     NSDictionary *diagnostic = [attrs objectForKey:kSCKDiagnostic];
-     
-     // NSLog(@"attrs:%@",attrs);
-     //   NSLog(@"attributedSubstringFromRange:%@",[source attributedSubstringFromRange:range] );
-     // Skip ranges that have attributes other than semantic markup
-     if ((nil == semantic) && (nil == token)) continue;
-     if (semantic == SCKTextTypePreprocessorDirective)
-     {
-     attrs = [semanticAttributes objectForKey: semantic];
-     }
-     else if (token == nil || token != SCKTextTokenTypeIdentifier)
-     {
-     attrs = [tokenAttributes objectForKey: token];
-     }
-     else
-     {
-     NSString *semantic = [attrs objectForKey:kSCKTextSemanticType];
-     attrs = [semanticAttributes objectForKey:semantic];
-     }
-     
-     if (nil == attrs)
-     {
-     attrs = noAttributes;
-     }
-     
-     if ([token isEqualToString:SCKTextTokenTypeLiteral]) {
-     [self ripOutAtSymbol:attrs source:source range:r];
-     }else   if ([token isEqualToString:SCKTextTypeMacroInstantiation]) {
-     [self ripOutStuff:attrs source:source range:r];
-     }else  if ([token isEqualToString:SCKTextTypeMacroDefinition]) {
-     [self ripOutStuff:attrs source:source range:r];
-     }else   if ([token isEqualToString:SCKTextTypePreprocessorDirective]) {
-     [self ripOutStuff:attrs source:source range:r];
-     }else if ([token isEqualToString:SCKTextTokenTypeComment]) {
-     [self ripOutStuff:attrs source:source range:r];
-     }else if ([token isEqualToString:SCKTextTokenTypePunctuation]) {
-     // TODO perform regex here -
-     [self ripOutStuffForPunctuation:attrs source:source range:r]; // this is currently destroying the alloc]init] brackets.
-     }else{
-     [source setAttributes:attrs range:r];
-     }
-     
-     // Re-apply the diagnostic
-     //        if (nil != diagnostic)
-     //        {
-     //            [source addAttribute:NSToolTipAttributeName
-     //                           value:[diagnostic objectForKey: kSCKDiagnosticText]
-     //                           range:r];
-     //            [source addAttribute:NSUnderlineStyleAttributeName
-     //                           value:[NSNumber numberWithInt: NSSingleUnderlineStyle]
-     //                           range:r];
-     //            [source addAttribute:NSUnderlineColorAttributeName
-     //                           value:[NSColor redColor]
-     //                           range:r];
-     //        }
-     } while (i < end);
-     
-     [[source  copy] enumerateAttributesInRange:NSMakeRange(0, source.length) options:NSAttributedStringEnumerationReverse  usingBlock:^(NSDictionary* attrs, NSRange range, BOOL *stop) {
-     if ([[attrs valueForKey:kMyHiddenTextAttribute] boolValue]) {
-     [source deleteCharactersInRange:range];
-     }
-     }];*/
     NSString *src = source.string;
     NSLog(@"src:%@", src);
     return src;

@@ -15,7 +15,7 @@
     NSUInteger currentLineOffset;
     NSArray *lines; //TODO - get rid of this.
     
-    
+    NSString *filename;
 }
 /**
  * Attributes to be applied to token types.

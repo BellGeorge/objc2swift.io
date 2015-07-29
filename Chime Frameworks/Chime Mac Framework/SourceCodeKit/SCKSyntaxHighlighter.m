@@ -196,13 +196,23 @@ static NSMutableDictionary *varsForHeader;
     NSString *className = [[line.string componentsSeparatedByString:@" "] objectAtIndex:1];
     className = [className stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
+    BOOL isExtension = NO;
+    if ([line.string containsString:@")"]) {
+        //@implementation NSColor (Extension)
+        isExtension = YES;
+    }
     
     NSString *swift = @"";
     if (superClass) {
         swift = [NSString stringWithFormat:@"class %@ : %@ {\r\r", className, superClass];
     }
     else {
-        swift = [NSString stringWithFormat:@"class %@ {\r\r", className];
+        if (isExtension) {
+            swift = [NSString stringWithFormat:@"extension class %@ {\r\r", className];
+        }else{
+           swift = [NSString stringWithFormat:@"class %@ {\r\r", className];
+        }
+        
     }
     NSMutableArray *arr = [varsForHeader valueForKey:className];
     
@@ -360,7 +370,7 @@ static NSMutableDictionary *varsForHeader;
         NSString *str = arr0[1];          //QuartzCore/QuartzCore.h>"
         NSArray *arr1 = [str componentsSeparatedByString:@"/"];         //  QuartzCore ,QuartzCore.h>
         NSString *str2 = arr1[0];
-        [swiftSource appendString:@"Import @"];
+        [swiftSource appendString:@"import @"];
         [swiftSource appendString:str2];
         [swiftSource appendString:@"\r"];
         [d0 setObject:[[NSMutableAttributedString alloc]initWithString:swiftSource] forKey:kAttributeString];
@@ -406,10 +416,9 @@ static NSMutableDictionary *varsForHeader;
 - (NSMutableString *)innerSwiftText:(NSMutableString*)innerSwift objCMessage:(NSString*)objCMessage{
     
     NSLog(@"innerSwift:%@ objCMessage:%@",innerSwift,objCMessage);
-    
+
     NSArray *matches = [self matchesRegExpression:@"\\[\\s*([^\\[\\]]*)\\s*\\]" searchString:objCMessage];
 
-    
     // REGEX PATTERN MATCHES -> \[\s*([^\[\]]*)\s*\] -> http://www.regexr.com/
     //   eg. matchText = [BackgroundView alloc]
     [matches enumerateObjectsUsingBlock: ^(NSTextCheckingResult *match, NSUInteger idx, BOOL *__nonnull stop) {
@@ -421,15 +430,14 @@ static NSMutableDictionary *varsForHeader;
         [matchText replaceOccurrencesOfString:@"  " withString:@" " options:0 range:NSMakeRange(0, matchText.length)];
         
         NSArray *params = [matchText componentsSeparatedByString:@":"];
-        
+        NSLog(@"params.count : %d",(int) params.count);
 
         if (params.count == 0 || params.count == 1) {
             NSArray *arr = [matchText componentsSeparatedByString:@" "];
             if ([matchText containsString:@"alloc"]) {
                 NSString *str = arr[0]; // NSTrackingArea alloc -> NSTrackingArea,alloc  //[Foo alloc] --> Foo
                 [innerSwift appendString:str];
-            }
-            else if ([matchText containsString:@"init"]) {
+            }else if ([matchText containsString:@"init"]) {
                 NSString *str = [NSString stringWithFormat:@"%@()", arr[0]]; //[Foo init]  --> Foo()
                 [innerSwift appendString:str];
             }
@@ -450,8 +458,11 @@ static NSMutableDictionary *varsForHeader;
             if (arr1.count>1) {
                 NSString *receiver = arr1[0];
                 NSString *method = arr1[1];
-                // convert to modern objective c syntax
-                if ([[method substringToIndex:3]isEqualToString:@"set"]) {
+                
+                
+                
+               
+                if ([[method substringToIndex:3]isEqualToString:@"set"]) {  // convert to modern objective c syntax
                     NSString *modernMethod0 = [method substringWithRange:NSMakeRange(3, [method length] - 3)];
                     
                     NSString *firstLetter = [modernMethod0 substringToIndex:1];
@@ -463,17 +474,33 @@ static NSMutableDictionary *varsForHeader;
                     
                     NSString *swift = [NSString stringWithFormat:@"%@.%@ = %@", receiver, m, message];
                     [innerSwift appendString:swift];
-                }
-                else {
+                }else {
                     NSString *swift = [NSString stringWithFormat:@"%@.%@(%@)", receiver, method, message];
                     [innerSwift appendString:swift];
                 }
             }else{
-                // we may on the inside or recursion and [initWithFrame:frame]
-                NSString *receiver = arr1[0];
                 
-                NSString *swift = [NSString stringWithFormat:@".%@(%@)", receiver, message];
-                [innerSwift appendString:swift];
+                // we may on the inside or recursion eg. [initWithFrame:frame]
+                NSString *receiver = params[0];
+                 NSString *message = params[1];
+                
+                 if ([receiver containsString:@"initWith"]) {
+                    NSArray *arr = [receiver componentsSeparatedByString:@"initWith"];
+                    NSString *str = arr[1];
+                    NSString *firstLetter = [str substringToIndex:1];
+                    firstLetter = [firstLetter lowercaseString]; // F -> f
+                    NSArray *arr1 = [str componentsSeparatedByString:@":"];
+                    
+                    NSString *str1 = arr1[0]; // Frame
+                    NSMutableString *param0 = str1.mutableCopy;
+                    [param0 replaceCharactersInRange:NSMakeRange(0, 1) withString:firstLetter]; // Frame -> frame
+                    NSString *str2 = [NSString stringWithFormat:@".init(%@:%@)", param0,message]; //BackgroundView.init(frame:frame)
+                    [innerSwift appendString:str2];
+                    
+                 }else{
+                     NSString *swift = [NSString stringWithFormat:@".%@(%@)", receiver, message];
+                     [innerSwift appendString:swift];
+                 }
                 
             }
             
@@ -493,7 +520,6 @@ static NSMutableDictionary *varsForHeader;
     
     
     // To iterate or to outerate - that is the question.
-    // if we iterate - we're bound to get irate.
     NSMutableArray *toTrash = [NSMutableArray array];
     [matches enumerateObjectsUsingBlock: ^(NSTextCheckingResult *match, NSUInteger idx, BOOL *__nonnull stop) {
          NSMutableString *matchText = [NSMutableString stringWithString:[objCMessage substringWithRange:[match range]]];
@@ -524,6 +550,8 @@ static NSMutableDictionary *varsForHeader;
     NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber];
     NSMutableAttributedString *line = d0[kAttributeString];
    
+   
+    
     @try {
 
         NSMutableString *mLine = line.string.mutableCopy;
@@ -774,8 +802,12 @@ static NSMutableDictionary *varsForHeader;
         // add in params
         NSMutableString *init = [NSMutableString stringWithFormat:@"%@(", methodName1];
         [types enumerateObjectsUsingBlock: ^(NSString *type, NSUInteger idx, BOOL *__nonnull stop) {
+            
             NSString *str2 = [NSString stringWithFormat:@"%@:%@", vars[idx], type];
             [init appendString:str2];
+            if (idx < types.count && types.count !=1) {
+               [init appendString:@","];
+            }
         }];
         [init appendString:@")"];
         [swiftSource appendString:init];

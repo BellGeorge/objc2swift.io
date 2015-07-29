@@ -16,6 +16,7 @@
     unsigned long long runningCurrentOffset;
 
     NSMutableString *swiftSource;
+    NSMutableString *headerSwiftVars;
     NSMutableDictionary *classDictionary;
 }
 

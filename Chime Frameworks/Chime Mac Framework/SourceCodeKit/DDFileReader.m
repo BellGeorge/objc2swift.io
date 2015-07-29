@@ -90,10 +90,32 @@
 - (void)createSwiftFileFrom:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection {
     // TODO - reach out to the header file and grab the lets and vars
     if ([filePath containsString:@".m"]) {
-        SCKSyntaxHighlighter *highligher = [[SCKSyntaxHighlighter alloc]init];
+        
+        // Parse the header file 1st so we can build swift vars for each interface detected
+        
+        NSMutableString *headerPath = filePath.mutableCopy;
+        [headerPath replaceOccurrencesOfString:@".m" withString:@".h" options:0 range:NSMakeRange(0, headerPath.length)];
+        
+        SCKSyntaxHighlighter *highlighter = [[SCKSyntaxHighlighter alloc]init];
+        SCKClangSourceFile *headerfile = [sourceCollection.files valueForKey:headerPath];
+
+        @try {
+            [highlighter buildInterfaceSwiftVarsForHeaderFile:headerfile]; // headerfile includes a static dictionary with ivars for each interface
+        }
+        @catch (NSException *exception)
+        {
+            NSLog(@"exception:%@", exception);
+        }
+        @finally
+        {
+        }
+       
+        
         //transformString
         @try {
-            swiftSource =  [NSMutableString stringWithFormat:@"%@", [highligher convertToSwiftSource:file sourceCollection:sourceCollection]];
+            
+            swiftSource = [NSMutableString string];
+            [swiftSource appendString:  [highlighter convertToSwiftSource:file sourceCollection:sourceCollection isHeader:NO]];
             
             NSData *data = [swiftSource dataUsingEncoding:NSUTF8StringEncoding];
             

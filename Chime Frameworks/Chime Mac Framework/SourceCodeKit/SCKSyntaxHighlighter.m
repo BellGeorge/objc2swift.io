@@ -11,6 +11,7 @@
 
 
 static NSDictionary *noAttributes;
+static NSMutableDictionary *varsForHeader;
 
 #define kMyHiddenTextAttribute @"kMyHiddenTextAttribute"
 #define kTextFormatNameStem @"com.mackerron.fmt."
@@ -68,7 +69,7 @@ static NSDictionary *noAttributes;
 
 // warning - this will strip out the attributes.
 - (NSMutableAttributedString *)destroyAttributesAndReplaceOccurrencesOfString:(NSString *)str0 withString:(NSString *)str1 {
-    NSMutableString *mStr = [[NSMutableString alloc]initWithString:self.string];
+    NSMutableString *mStr = self.string.mutableCopy;
     [mStr replaceOccurrencesOfString:str0 withString:str1 options:0 range:NSMakeRange(0, self.string.length)];
     NSMutableAttributedString *newStr = [[NSMutableAttributedString alloc]initWithString:mStr];
     return newStr;
@@ -134,6 +135,7 @@ static NSDictionary *noAttributes;
     static dispatch_once_t once = 0L;
     dispatch_once(&once, ^{
         noAttributes = [NSDictionary dictionary];
+        varsForHeader =  [NSMutableDictionary dictionary];
     });
 }
 
@@ -202,7 +204,15 @@ static NSDictionary *noAttributes;
     else {
         swift = [NSString stringWithFormat:@"class %@ {\r", className];
     }
-    [swiftSource appendString:swift];
+    NSMutableArray *arr = [varsForHeader valueForKey:className];
+    
+     [swiftSource appendString:swift];
+    [arr enumerateObjectsUsingBlock:^(NSString *swiftDef, NSUInteger idx, BOOL * __nonnull stop) {
+        [swiftSource appendString:swiftDef];
+        NSLog(@"swiftDef:%@",swiftDef);
+    }];
+    
+   
     
     // process the subsequent lines for vars.
     [lines enumerateObjectsUsingBlock: ^(NSMutableDictionary *d0, NSUInteger idx0, BOOL *stop0) {
@@ -225,8 +235,7 @@ static NSDictionary *noAttributes;
                 [lines enumerateObjectsUsingBlock: ^(NSMutableDictionary *d1, NSUInteger idx1, BOOL *stop1) {
                     if (idx1 > idx0) {
                         NSMutableAttributedString *aStr = d1[kAttributeString];
-                        NSMutableString *nextLine = [[NSMutableString alloc]init];
-                        nextLine.string = aStr.string;
+                        NSMutableString *nextLine = aStr.string.mutableCopy;
                         
                         //  strip out _ variable names
                         [nextLine replaceOccurrencesOfString:@"_" withString:@"" options:0 range:NSMakeRange(0, nextLine.length)];
@@ -306,8 +315,7 @@ static NSDictionary *noAttributes;
                 [lines enumerateObjectsUsingBlock: ^(NSMutableDictionary *dd, NSUInteger idx1, BOOL *stop1) {
                     if (idx1 > idx0) {
                         NSMutableAttributedString *aStr = dd[kAttributeString];
-                        NSMutableString *nextLine = [[NSMutableString alloc]init];
-                        nextLine.string = aStr.string;
+                        NSMutableString *nextLine = aStr.string.mutableCopy;
                         
                         //  strip out _ variable names
                         [nextLine replaceOccurrencesOfString:@"_" withString:@"" options:0 range:NSMakeRange(0, nextLine.length)];
@@ -576,7 +584,7 @@ static NSDictionary *noAttributes;
     NSMutableString *swiftSource = [[NSMutableString alloc]init];
     NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber];
     NSMutableAttributedString *line = d0[kAttributeString];
-    NSMutableString *mStr = [NSMutableString stringWithString:line.string];
+    NSMutableString *mStr = line.string.mutableCopy;
     [mStr replaceOccurrencesOfString:@"*" withString:@"" options:0 range:NSMakeRange(0, mStr.length)];
     //[mStr replaceOccurrencesOfString:@":" withString:@"" options:0 range:NSMakeRange(0, mStr.length)];
     
@@ -605,7 +613,7 @@ static NSDictionary *noAttributes;
         }
     }];
     // rip out the type (NSTableView ) -> ""
-    NSMutableString *varString = [NSMutableString stringWithString:mStr];
+    NSMutableString *varString = mStr.mutableCopy;
     [toTrash enumerateObjectsUsingBlock: ^(NSString *trashString, NSUInteger idx, BOOL *__nonnull stop) {
         [varString replaceOccurrencesOfString:trashString withString:@"" options:0 range:NSMakeRange(0, varString.length)];
     }];
@@ -641,7 +649,7 @@ static NSDictionary *noAttributes;
         NSArray *arr1 = [str componentsSeparatedByString:@":"];
         
         NSString *str1 = arr1[0]; // Frame
-        NSMutableString *param0 = [NSMutableString stringWithString:str1];
+        NSMutableString *param0 = str1.mutableCopy;
         [param0 replaceCharactersInRange:NSMakeRange(0, 1) withString:firstLetter]; // Frame -> frame
         if (types.count == 1) {
             NSString *init = [NSString stringWithFormat:@"init(%@:%@)\r", param0, types[0]];
@@ -703,20 +711,34 @@ static NSDictionary *noAttributes;
     return swiftSource;
 }
 
-- (NSString *)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection {
+-(void)convertTypeToSwiftType:(NSString*)objcType{
+    
+}
+- (void)buildInterfaceSwiftVarsForHeaderFile:(SCKClangSourceFile *)file {
+    [self convertToSwiftSource:file sourceCollection:nil isHeader:YES];
+}
+- (NSString *)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection isHeader:(BOOL)bHeader {
+    
     NSMutableAttributedString *source = file.source;
     
     currentLineOffset = -1;
     
+    __block NSString *currentInterface = @"";
+    
     [source.lines enumerateObjectsUsingBlock: ^(NSMutableDictionary *d0, NSUInteger idx, BOOL *stop0) {
         NSMutableAttributedString *line = d0[kAttributeString];
-        
+    
+      
         @try {
-            // 1st Pass -  WASH CLEAN CODE BEFORE WE PARSE IT
+            // 1st Pass -  WASH CLEAN CODE BEFORE WE DROP DOWN FURTHER // TODO - make these configurable parameters
+            __block NSString *typeRef = @"";
+            __block NSString *typeDecl = @"";
+            
             [line enumerateAttributesInRange:NSMakeRange(0, line.length) options:0  usingBlock: ^(NSDictionary *attrs, NSRange range, BOOL *stop1) {
-                // NSString *semantic = [attrs objectForKey:kSCKTextSemanticType];
+                 NSString *semantic = [attrs objectForKey:kSCKTextSemanticType];
                 NSString *token = [attrs objectForKey:kSCKTextTokenType];
-                
+                NSMutableString *mLine = line.string.mutableCopy;
+             
                 if (range.length == 0) {
                     return;
                 }
@@ -726,7 +748,83 @@ static NSDictionary *noAttributes;
                     [line deleteCharactersInRange:range];
                 if ([token isEqualToString:SCKTextTokenTypeComment])
                     [line deleteCharactersInRange:range];
+                if ([token isEqualToString:SCKTextTokenTypeIdentifier]){
+                 
+                    // BEGIN HEADER SPECIFIC GUFF
+                    // FIND LOCAL VARS FOR HEADER SPECIFIC STUFF.
+                   
+                    if ([mLine containsString:@"@interface"]){
+                        [mLine replaceOccurrencesOfString:@"@interface" withString:@"" options:0 range:NSMakeRange(0, mLine.length)];
+                       
+                         if ([mLine componentsSeparatedByString:@":"].count>1) {
+                             NSString *interface = [[[mLine componentsSeparatedByString:@":"] objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                             currentInterface = interface;
+                         }else{
+                             currentInterface = [[[mLine componentsSeparatedByString:@" "] objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                         }
+                         
+                         NSMutableArray *arr = [varsForHeader valueForKey:currentInterface];
+                         if(!arr){
+                             [varsForHeader setObject:[NSMutableArray array] forKey:currentInterface];
+                         }
+                          NSLog(@"mline:%@ currentInterface:%@",mLine,currentInterface);
+                         return;
+                    }
+                         
+                         
+                    if ([line.string containsString:@"-"]
+                        ||[line.string containsString:@"+"]
+                        || [line.string containsString:@"import"]
+                        || [line.string containsString:@"@end"]  ) { // we're looking local declarations eg. -> NSMutableArray *_tableContents0
+                        return;
+                    }
+                    NSMutableString *word = [[[line attributedSubstringFromRange:range].string componentsSeparatedByString:@" "] objectAtIndex:0].mutableCopy;
+                    //NSTrackingArea *trackingArea; ->  NSTrackingArea
+                    [word replaceOccurrencesOfString:@"_" withString:@"" options:0 range:NSMakeRange(0, word.length)];
+                    NSLog(@"word:%@ string:%@ semantic:%@", word,line.string,semantic);
+                    if ([semantic isEqualToString:SCKTextTypeReference]) {
+                        typeRef = word;
+                    }
+                    if ([semantic isEqualToString:SCKTextTypeDeclaration]) {
+                        // fragile
+                        if (typeDecl.length>0) {
+                            typeRef = typeDecl.copy;
+                            typeDecl = word;
+                        }else{
+                            typeDecl = word;
+                        }
+                      
+                    }
+                    
+                }
             }];
+            
+            // bingo
+            if (typeDecl.length > 0 && typeRef.length > 0) {
+                NSString *swiftDef = @"";
+               
+                if ([line.string containsString:@"readonly"]) {
+                    swiftDef = [NSString stringWithFormat:@"let %@:%@\r",typeDecl, [self convertType:typeRef]];
+                }else{
+                    swiftDef = [NSString stringWithFormat:@"var %@:%@\r",typeDecl, [self convertType:typeRef]];
+                }
+                NSLog(@"swiftDef:%@ currentInterface:%@",swiftDef,currentInterface);
+                //NSLog(@"typeDecl:%@",typeDecl);
+                
+                 NSMutableArray *arr = [varsForHeader valueForKey:currentInterface];
+                NSLog(@"arr:%@",arr);
+                [arr addObject:swiftDef];
+                [d0 setObject:@1 forKey:kIsLineDeleted]; // we're in the header file - but we didn't get a var - blow this away.
+                return;
+            }else{
+             
+                
+                if (bHeader) {
+                    [d0 setObject:@1 forKey:kIsLineDeleted]; // we're in the header file - but we didn't get a var - blow this away.
+                    return;
+                }
+            }
+            
         }
         @catch (NSException *exception)
         {
@@ -925,6 +1023,10 @@ static NSDictionary *noAttributes;
         }
     }];
     
+    if (bHeader){
+        NSLog(@"interface swiftvars:%@",varsForHeader);
+        return @"";
+    }
     source = source.cookedAttributeText; // using the category helper - we have preserved original source - but ripped out some text. It's been cooked.
     // NSLog(@"cooked Text:%@",source);
     

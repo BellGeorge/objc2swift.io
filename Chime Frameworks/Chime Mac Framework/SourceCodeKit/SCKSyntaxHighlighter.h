@@ -14,6 +14,8 @@
 {
     NSUInteger currentLineOffset;
     NSArray *lines;
+
+    
 }
 /**
  * Attributes to be applied to token types.
@@ -32,5 +34,9 @@
 /**
     BEGIN HACK
  */
-- (NSString*)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection;
+- (void)buildInterfaceSwiftVarsForHeaderFile:(SCKClangSourceFile *)file;
+
+- (NSString *)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection isHeader:(BOOL)bHeader;
+
+
 @end

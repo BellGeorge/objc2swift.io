@@ -507,7 +507,7 @@ static NSMutableArray *argumentsFromSingleString(NSString *singleString) {
     //
     //    }];
     [sourceCollection.files enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCKClangSourceFile *file, BOOL * __nonnull stop) {
-        
+         NSLog(@"key:%@",key);
         if ([file isKindOfClass:[SCKClangSourceFile class]]) {
             
             DDFileReader *reader = [[DDFileReader alloc]initWithFilePath:file.fileName];

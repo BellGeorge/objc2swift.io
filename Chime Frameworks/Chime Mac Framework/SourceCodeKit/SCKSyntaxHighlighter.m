@@ -366,8 +366,8 @@ static NSMutableDictionary *varsForHeader;
     //@"#import <QuartzCore/QuartzCore.h>" -> Import @QuartzCore
     
     if ([line.string containsString:@"<"]) {
-        NSArray *arr0 = [line.string componentsSeparatedByString:@"<"];  //   #import <,  QuartzCore/QuartzCore.h>"
-        NSString *str = arr0[1];  //QuartzCore/QuartzCore.h>"
+        NSArray *arr0 = [line.string componentsSeparatedByString:@"<"]; //   #import <,  QuartzCore/QuartzCore.h>"
+        NSString *str = arr0[1]; //QuartzCore/QuartzCore.h>"
         NSArray *arr1 = [str componentsSeparatedByString:@"/"]; //  QuartzCore ,QuartzCore.h>
         NSString *str2 = arr1[0];
         [swiftSource appendString:@"import @"];
@@ -424,6 +424,9 @@ static NSMutableDictionary *varsForHeader;
     [matches enumerateObjectsUsingBlock: ^(NSTextCheckingResult *match, NSUInteger idx, BOOL *__nonnull stop) {
         NSMutableString *matchText = [NSMutableString stringWithString:[objCMessage substringWithRange:[match range]]];
         NSLog(@">: %@", matchText);
+        if ([matchText containsString:@"release"] ||[matchText containsString:@"retain"] ||[matchText containsString:@"dealloc"] ) { //<-  auto-release
+            return;
+        }
         [matchText replaceOccurrencesOfString:@"[" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
         [matchText replaceOccurrencesOfString:@"]" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
         [matchText replaceOccurrencesOfString:@";" withString:@"" options:0 range:NSMakeRange(0, matchText.length)];
@@ -438,7 +441,14 @@ static NSMutableDictionary *varsForHeader;
                 NSString *str = arr[0]; // NSTrackingArea alloc -> NSTrackingArea,alloc  //[Foo alloc] --> Foo
                 [innerSwift appendString:str];
             }else if ([matchText containsString:@"init"]) {
-                NSString *str = [NSString stringWithFormat:@"%@()", arr[0]]; //[Foo init]  --> Foo()
+                NSLog(@"init : %@",arr[0]);
+                NSString *str =@"";
+                if ([arr[0] isEqualToString:@"init"]) {
+                    str = [NSString stringWithFormat:@"()"];
+                }else{
+                    str = [NSString stringWithFormat:@"%@()", arr[0]];
+                }
+                
                 [innerSwift appendString:str];
             }
             else { // [Foo bar] --> Foo.bar()
@@ -458,9 +468,6 @@ static NSMutableDictionary *varsForHeader;
             if (arr1.count>1) {
                 NSString *receiver = arr1[0];
                 NSString *method = arr1[1];
-                
-                
-                
                 
                 if ([[method substringToIndex:3]isEqualToString:@"set"]) { // convert to modern objective c syntax
                     NSString *modernMethod0 = [method substringWithRange:NSMakeRange(3, [method length] - 3)];
@@ -542,6 +549,57 @@ static NSMutableDictionary *varsForHeader;
     return innerSwift;
 }
 
+// BEGIN HEADER SPECIFIC GUFF
+// FIND LOCAL VARS FOR HEADER SPECIFIC STUFF.
+
+// TODO  - if the method is on the same line - we're good - otherwise we are going to have to iterate subsequent lines....
+- (NSString *)convertInterfaceToVars:(NSMutableAttributedString *)attStr lineNumber:(NSUInteger)lineNumber  {
+    currentLineOffset = lineNumber;
+    
+    NSMutableAttributedString *line = [lines objectAtIndex:lineNumber][kAttributeString];
+    
+    if (![line.string containsString:@"@interface"]) {
+        return @""; // FATAL
+    }
+    NSMutableString *mLine = line.string.mutableCopy;
+    NSString *currentInterface;
+    [mLine replaceOccurrencesOfString:@"@interface" withString:@"" options:0 range:NSMakeRange(0, mLine.length)];
+    
+    if ([mLine componentsSeparatedByString:@":"].count>1) {
+        NSString *interface = [[[mLine componentsSeparatedByString:@":"] objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        currentInterface = interface;
+    }else{
+        currentInterface = [[[mLine componentsSeparatedByString:@" "] objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    }
+    
+    NSMutableArray *arr = [varsForHeader valueForKey:currentInterface];
+    if(!arr) {
+        [varsForHeader setObject:[NSMutableArray array] forKey:currentInterface];
+    }
+    NSLog(@"mline:%@ currentInterface:%@",mLine,currentInterface);
+    
+    BOOL hasOuterBracket = NO;
+    if ([mLine containsString:@"{"]) {
+        hasOuterBracket = YES;
+    }
+    
+    
+    // look ahead and set the text to deleted so we can erase the {
+    // } -- this is happening on implementation files with interfaces...
+    // the vars will still be read....
+    for (int i=1; i<50; i++) {
+        NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber+i];
+        NSMutableAttributedString *line = d0[kAttributeString];
+        if ([line.string containsString:@"@end"]) {
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            break;
+        }
+        
+        [d0 setObject:@1 forKey:kIsLineDeleted];
+    }
+    return currentInterface;
+    
+}
 // TODO  - if the method is on the same line - we're good - otherwise we are going to have to iterate subsequent lines....
 - (NSMutableString *)convertMessageSends:(NSMutableAttributedString *)attStr lineNumber:(NSUInteger)lineNumber matches:(NSArray *)matches {
     currentLineOffset = lineNumber;
@@ -719,8 +777,9 @@ static NSMutableDictionary *varsForHeader;
 // take 1 line -> spit out swift formatted code
 - (NSMutableString *)convertMethod:(NSMutableAttributedString *)attStr lineNumber:(NSUInteger)lineNumber matches:(NSArray *)matches {
     currentLineOffset = lineNumber;
+    lines = attStr.lines;
     NSMutableString *swiftSource = [[NSMutableString alloc]init];
-    NSMutableDictionary *d0 = [lines objectAtIndex:lineNumber];
+    NSMutableDictionary *d0 = [attStr.lines objectAtIndex:lineNumber];
     NSMutableAttributedString *line = d0[kAttributeString];
     NSMutableString *mStr = line.string.mutableCopy;
     [mStr replaceOccurrencesOfString:@"*" withString:@"" options:0 range:NSMakeRange(0, mStr.length)];
@@ -776,6 +835,18 @@ static NSMutableDictionary *varsForHeader;
     else {
         [swiftSource appendString:@"\rfunc "];
     }
+    BOOL hasOuterbrace = NO;
+    if ([mStr containsString:@"{"]) { // at the end of line
+        hasOuterbrace = YES;
+    }else{
+        NSMutableDictionary *d0 = [attStr.lines objectAtIndex:lineNumber+1];
+        NSMutableAttributedString *line1 = d0[kAttributeString];
+        NSString *trimString =     [line1.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if ([trimString isEqualToString:@"{"]) {
+            [d0 setObject:@1 forKey:kIsLineDeleted];
+            hasOuterbrace = NO;
+        }
+    }
     
     if ([mStr containsString:@"initWith"]) {
         
@@ -818,7 +889,12 @@ static NSMutableDictionary *varsForHeader;
             [swiftSource appendString:returnType];
         }
         
-        [swiftSource appendString:@"\r{\r"];
+        if (!hasOuterbrace) {
+            [swiftSource appendString:@"\r{\r"];
+        }else{
+            [swiftSource appendString:@"\r"];
+        }
+        
         
         // TODO INSPECT NEXT LINE FOR //\s+(\w+):\s*\((.+)\)\s*(\w+) - find parameters on next line
     }
@@ -865,24 +941,10 @@ static NSMutableDictionary *varsForHeader;
                     [line deleteCharactersInRange:range];
                 if ([token isEqualToString:SCKTextTokenTypeIdentifier]) {
                     
-                    // BEGIN HEADER SPECIFIC GUFF
-                    // FIND LOCAL VARS FOR HEADER SPECIFIC STUFF.
+                    
                     
                     if ([mLine containsString:@"@interface"]) {
-                        [mLine replaceOccurrencesOfString:@"@interface" withString:@"" options:0 range:NSMakeRange(0, mLine.length)];
-                        
-                        if ([mLine componentsSeparatedByString:@":"].count>1) {
-                            NSString *interface = [[[mLine componentsSeparatedByString:@":"] objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                            currentInterface = interface;
-                        }else{
-                            currentInterface = [[[mLine componentsSeparatedByString:@" "] objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                        }
-                        
-                        NSMutableArray *arr = [varsForHeader valueForKey:currentInterface];
-                        if(!arr) {
-                            [varsForHeader setObject:[NSMutableArray array] forKey:currentInterface];
-                        }
-                        NSLog(@"mline:%@ currentInterface:%@",mLine,currentInterface);
+                        currentInterface = [self convertInterfaceToVars:line lineNumber:idx];
                         return;
                     }
                     

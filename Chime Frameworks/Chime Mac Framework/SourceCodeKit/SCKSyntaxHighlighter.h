@@ -13,8 +13,8 @@
 @interface SCKSyntaxHighlighter : NSObject
 {
     NSUInteger currentLineOffset;
-    NSArray *lines;
-
+    NSArray *lines; //TODO - get rid of this.
+    
     
 }
 /**
@@ -32,7 +32,7 @@
 - (void)transformString: (NSMutableAttributedString*)source;
 
 /**
-    BEGIN HACK
+ BEGIN HACK
  */
 - (void)buildInterfaceSwiftVarsForHeaderFile:(SCKClangSourceFile *)file;
 

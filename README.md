@@ -14,6 +14,69 @@ Fire up app - open existing workspace / project
 Auto conversion of code into swift
 
 
+IMPORTANT -
+Conversion Process from Objective-C syntax to Swift 
+The most important first step is to run Apple's "Convert to Modern Objective-C Syntax" refactoring, so that you're 
+using array/dictionary literals and bracket-accesses; these will then be usable in Swift. 
+
+
+| When you see this pattern                                     | Replace with this                                                                                                  | STATUS |
+|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|--------|
+| Module                                                        |                                                                                                                    |        |
+| @interface *newType* : *superType* <*protocol1*, *protocol2*> | class *newType* : *superType*, *protocol1*, *protocol2*                                                            | OK     |
+| @implementation OR @synthesize OR @end                        | Delete                                                                                                             | OK     |
+| Properties                                                    |                                                                                                                    |        |
+| property(…) TypeName * varName;                               | var varName:TypeName                                                                                               | OK     |
+| property (readonly...) TypeName * varName;                    | let varName:TypeName                                                                                               | OK     |
+| property(…) TypeName * IBOutlet varName;                      | @IBOutlet var varName:TypeName                                                                                     | TODO   |
+| _property                                                     | self.property                                                                                                      |        |
+| Compiler Directives                                           |                                                                                                                    |        |
+| #import module.h                                              | Obj-C modules: Include in ...-Bridging-Header.h Project modules: DeleteFrameworks: import module                   | OK     |
+| #define macroName value                                       | let macroName = value                                                                                              | TODO   |
+| More complex#define / #ifdef / #ifndef                        | N/A                                                                                                                | REMOVED|
+| #elif value                                                   | #elseif value                                                                                                      | REMOVED|
+| #pragma mark sectionName                                      | // MARK: sectionName (not implemented yet)                                                                         | OK     |
+| NSAssert(conditon,description)                                | assert(condition, description)                                                                                     | TODO   |
+| Types                                                         |                                                                                                                    |        |
+| NSString *                                                    | String                                                                                                             |  ?     |
+| NSArray * arrayName = arrayValue                              | let arrayName = arrayValue ORlet arrayName: Array<TypeName> = arrayValue OR let arrayName: TypeName[] = arrayValue | TODO   |
+| NSDictionary *                                                | Dictionary                                                                                                         | TODO   |
+| NSMutableArray OR NSMutableDictionary ...                     | var arrayName...                                                                                                   | OK     |
+| id                                                            | AnyObject                                                                                                          |        |
+| TypeName *                                                    | TypeName                                                                                                           | OK     |
+| c types, e.g. uint32 OR float                                 | Titlecase , e.g. UInt32 or Float                                                                                   | OK     |
+| NSInteger OR NSUInteger                                       | Int OR UInt                                                                                                        | OK     |
+| Method Definitions                                            |                                                                                                                    | OK     |
+| -(void) methodName                                            | func methodName()                                                                                                  | OK     |
+| -(TypeName) methodName                                        | func methodName() -> TypeName                                                                                      | OK     |
+| -(IBAction) methodName                                        | @IBAction func methodName                                                                                          | TODO   |
+| #ERROR!                                                       | class func methodName() -> TypeName                                                                                | TODO   |
+| ...methodName: (Type1) param1 b: (Type2) param2               | ...methodName(param: Type1 b param2: Typ2)                                                                         | TODO   |
+| method overriden from superclass                              | add override                                                                                                       |        |
+| Variables                                                     |                                                                                                                    |        |
+| TypeName varName = value                                      | var (OR let) name = value OR var (OR let) name: TypeName if necessary                                              |  OK    |
+| Object Creation                                               |                                                                                                                    |        |
+| TypeName * varName = [[TypeName alloc] init]                  | varName = TypeName()                                                                                               |  OK    |
+| [[TypeName alloc] initWithA: value1 B: value2]                | TypeName(a: value1, b: value2)                                                                                     | DRAFTED|
+| [TypeName TypeNameWithA: value]                               | TypeName(a: value)                                                                                                 |  OK    |
+| Statements                                                    |                                                                                                                    |        |
+| break in switch statements                                    | not necessary, except for empty cases,but add fallthrough where needed                                             |        |
+| if/while (expr)                                               | if/while expr, parentheses optional,but expr must now be a boolean                                                 |        |
+| for ( ... )                                                   | for ..., optional                                                                                                  |        |
+| Method Calls                                                  |                                                                                                                    |        |
+| [object method]                                               | object.method()                                                                                                    |        |
+| [object method: param1 b: param2 …]                           | object.method(param1, b: param2, …)                                                                                |        |
+| Expressions                                                   |                                                                                                                    |        |
+| YES                                                           | TRUE                                                                                                               |        |
+| NO                                                            | FALSE                                                                                                              | OK     |
+| (TypeName) value to recast                                    | value as TypeName OR TypeName(value)                                                                               | OK     |
+| stringName.length                                             | stringName.utf16 ORstringName.countElements                                                                        | TODO   |
+| stringName isEqualToString: string2Name                       | stringName == string2Name                                                                                          | TODO   |
+| NSString stringWithFormat@"...%@..%d",obj,int)                | ...\(obj)...\(int)                                                                                                 | TODO   |
+| Miscellaneous                                                 |                                                                                                                    |        |
+| semicolons at end of line                                     | Optionally delete                                                                                                  |  OK    |
+| @ for literals                                                | Delete                                                                                                             |  OK    |
+
 Background
 ===================================
 Jens Alfke  crafted this ruby hack  with regex code 

@@ -4,15 +4,8 @@ ShimmyShimmy
 
 Intention of project
 ===================================
-This app is a stop gap until Xcode has a button to convert an objective-c project over to swift. 
+This attached sourcecode is a stop gap until Xcode has a button to convert an objective-c project over to swift. 
 There are potential commercial opportunities worth exploring. To discuss.
-
-
-How it will work 
-===================================
-Fire up app - open existing workspace / project
-Auto conversion of code into swift
-
 
 
 Conversion Process from Objective-C syntax to Swift 
@@ -39,11 +32,11 @@ using array/dictionary literals and bracket-accesses; these will then be usable 
 | #pragma mark sectionName                                      | // MARK: sectionName (not implemented yet)                                                                         | OK     |
 | NSAssert(conditon,description)                                | assert(condition, description)                                                                                     | TODO   |
 | Types                                                         |                                                                                                                    |        |
-| NSString *                                                    | String                                                                                                             |  ?     |
-| NSArray * arrayName = arrayValue                              | let arrayName = arrayValue ORlet arrayName: Array<TypeName> = arrayValue OR let arrayName: TypeName[] = arrayValue | TODO   |
+| NSString *                                                    | String                                                                                                             | TODO   |
+| NSArray * arrayName = arrayValue                              | let arrayName = arrayValue ORlet arrayName: Array<TypeName> = arrayValue OR let arrayName: TypeName[] = arrayValue | DRAFTED|
 | NSDictionary *                                                | Dictionary                                                                                                         | TODO   |
 | NSMutableArray OR NSMutableDictionary ...                     | var arrayName...                                                                                                   | OK     |
-| id                                                            | AnyObject                                                                                                          |        |
+| id                                                            | AnyObject                                                                                                          | OK     |
 | TypeName *                                                    | TypeName                                                                                                           | OK     |
 | c types, e.g. uint32 OR float                                 | Titlecase , e.g. UInt32 or Float                                                                                   | OK     |
 | NSInteger OR NSUInteger                                       | Int OR UInt                                                                                                        | OK     |
@@ -51,8 +44,8 @@ using array/dictionary literals and bracket-accesses; these will then be usable 
 | -(void) methodName                                            | func methodName()                                                                                                  | OK     |
 | -(TypeName) methodName                                        | func methodName() -> TypeName                                                                                      | OK     |
 | -(IBAction) methodName                                        | @IBAction func methodName                                                                                          | TODO   |
-| #ERROR!                                                       | class func methodName() -> TypeName                                                                                | TODO   |
-| ...methodName: (Type1) param1 b: (Type2) param2               | ...methodName(param: Type1 b param2: Typ2)                                                                         | TODO   |
+| #ERROR!                                                       | class func methodName() -> TypeName                                                                                | OK     |
+| ...methodName: (Type1) param1 b: (Type2) param2               | ...methodName(param: Type1 b param2: Typ2)                                                                         | DRAFTED|
 | method overriden from superclass                              | add override                                                                                                       | TODO   |
 | Variables                                                     |                                                                                                                    |        |
 | TypeName varName = value                                      | var (OR let) name = value OR var (OR let) name: TypeName if necessary                                              |  OK    |
@@ -63,14 +56,14 @@ using array/dictionary literals and bracket-accesses; these will then be usable 
 | Statements                                                    |                                                                                                                    |        |
 | break in switch statements                                    | not necessary, except for empty cases,but add fallthrough where needed                                             |        |
 | if/while (expr)                                               | if/while expr, parentheses optional,but expr must now be a boolean                                                 |        |
-| for ( ... )                                                   | for ..., optional                                                                                                  |        |
+| for ( ... )                                                   | for ..., optional                                                                                                  | TODO   |
 | Method Calls                                                  |                                                                                                                    |        |
-| [object method]                                               | object.method()                                                                                                    |        |
-| [object method: param1 b: param2 …]                           | object.method(param1, b: param2, …)                                                                                |        |
+| [object method]                                               | object.method()                                                                                                    | OK     |
+| [object method: param1 b: param2 …]                           | object.method(param1, b: param2, …)                                                                                | DRAFTED|
 | Expressions                                                   |                                                                                                                    |        |
-| YES                                                           | TRUE                                                                                                               |        |
+| YES                                                           | TRUE                                                                                                               | OK     |
 | NO                                                            | FALSE                                                                                                              | OK     |
-| (TypeName) value to recast                                    | value as TypeName OR TypeName(value)                                                                               | OK     |
+| (TypeName) value to recast                                    | value as TypeName OR TypeName(value)                                                                               | TODO   |
 | stringName.length                                             | stringName.utf16 ORstringName.countElements                                                                        | TODO   |
 | stringName isEqualToString: string2Name                       | stringName == string2Name                                                                                          | TODO   |
 | NSString stringWithFormat@"...%@..%d",obj,int)                | ...\(obj)...\(int)                                                                                                 | TODO   |

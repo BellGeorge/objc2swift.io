@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4FA72FA8189A325E00AFD8B3"
-               BuildableName = "Chime Project Indexer.app"
-               BlueprintName = "Chime Project Indexer"
-               ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/Chime Project Indexer.xcodeproj">
+               BuildableName = "objc2swift.io.app"
+               BlueprintName = "objc2swift.io"
+               ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/objc2swift.io.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -57,18 +57,18 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4FA72FC9189A325E00AFD8B3"
-               BuildableName = "Chime Project Indexer Tests.xctest"
-               BlueprintName = "Chime Project Indexer Tests"
-               ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/Chime Project Indexer.xcodeproj">
+               BuildableName = "objc2swift.io.xctest"
+               BlueprintName = "objc2swift.io Tests"
+               ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/objc2swift.io.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -85,9 +85,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4FA72FC9189A325E00AFD8B3"
-               BuildableName = "Chime Project Indexer Tests.xctest"
-               BlueprintName = "Chime Project Indexer Tests"
-               ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/Chime Project Indexer.xcodeproj">
+               BuildableName = "objc2swift.io.xctest"
+               BlueprintName = "objc2swift.io Tests"
+               ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/objc2swift.io.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -95,38 +95,42 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4FA72FA8189A325E00AFD8B3"
-            BuildableName = "Chime Project Indexer.app"
-            BlueprintName = "Chime Project Indexer"
-            ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/Chime Project Indexer.xcodeproj">
+            BuildableName = "objc2swift.io.app"
+            BlueprintName = "objc2swift.io"
+            ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/objc2swift.io.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4FA72FA8189A325E00AFD8B3"
-            BuildableName = "Chime Project Indexer.app"
-            BlueprintName = "Chime Project Indexer"
-            ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/Chime Project Indexer.xcodeproj">
+            BuildableName = "objc2swift.io.app"
+            BlueprintName = "objc2swift.io"
+            ReferencedContainer = "container:Chime Test Apps/Chime Project Indexer/objc2swift.io.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
    </ProfileAction>
    <AnalyzeAction

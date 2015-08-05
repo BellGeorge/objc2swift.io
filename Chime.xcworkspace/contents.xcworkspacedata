@@ -5,7 +5,7 @@
       location = "group:Chime Frameworks/Chime Mac Framework/Chime Mac Framework.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Chime Test Apps/Chime Project Indexer/Chime Project Indexer.xcodeproj">
+      location = "group:/Users/johnpope/Documents/gitWorkspace/ShimmyShimmy/Chime Test Apps/Chime Project Indexer/objc2swift.io.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Chime Test Apps/chimesimpletester/chimesimpletester.xcodeproj">

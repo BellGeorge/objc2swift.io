@@ -26,6 +26,7 @@
 		5D21236E1B65B38E00DC5B7A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5D2123681B65B38E00DC5B7A /* LICENSE.txt */; };
 		5D21236F1B65B38E00DC5B7A /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123691B65B38E00DC5B7A /* readme.md */; };
 		5D2123701B65B38E00DC5B7A /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21236B1B65B38E00DC5B7A /* RegExCategories.m */; };
+		5DF516721B71C9AE00C24B9B /* swift-og.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5DF516711B71C9AE00C24B9B /* swift-og.icns */; };
 		5DF9F49B1B60D0D900F767FE /* Chime.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5DF9F4961B60D0BA00F767FE /* Chime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -80,14 +81,14 @@
 		4F4A668E189B039600695F64 /* IndexDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndexDocument.h; sourceTree = "<group>"; };
 		4F4A668F189B039600695F64 /* IndexDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexDocument.m; sourceTree = "<group>"; };
 		4F4A6697189B03EF00695F64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/IndexDocument.xib; sourceTree = "<group>"; };
-		4FA72FA9189A325E00AFD8B3 /* Chime Project Indexer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chime Project Indexer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FA72FA9189A325E00AFD8B3 /* ShimmyShimmy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShimmyShimmy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FA72FAC189A325E00AFD8B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4FA72FAF189A325E00AFD8B3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		4FA72FB0189A325E00AFD8B3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4FA72FB1189A325E00AFD8B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4FA72FB4189A325E00AFD8B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4FA72FBA189A325E00AFD8B3 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
-		4FA72FCA189A325E00AFD8B3 /* Chime Project Indexer Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Chime Project Indexer Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FA72FCA189A325E00AFD8B3 /* ShimmyShimmy.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShimmyShimmy.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FA72FCB189A325E00AFD8B3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4FA72FD2189A325E00AFD8B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FA72FD4189A325E00AFD8B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -104,6 +105,7 @@
 		5D2123691B65B38E00DC5B7A /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		5D21236A1B65B38E00DC5B7A /* RegExCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExCategories.h; sourceTree = "<group>"; };
 		5D21236B1B65B38E00DC5B7A /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
+		5DF516711B71C9AE00C24B9B /* swift-og.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "swift-og.icns"; path = "../../swift-og.icns"; sourceTree = "<group>"; };
 		5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Chime Mac Framework.xcodeproj"; path = "../../Chime Frameworks/Chime Mac Framework/Chime Mac Framework.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +134,7 @@
 		4FA72FA0189A325E00AFD8B3 = {
 			isa = PBXGroup;
 			children = (
+				5DF516711B71C9AE00C24B9B /* swift-og.icns */,
 				5D2123641B65B38D00DC5B7A /* External */,
 				5DF9F48F1B60D0B900F767FE /* Chime Mac Framework.xcodeproj */,
 				4FA72FB2189A325E00AFD8B3 /* Chime Project Indexer */,
@@ -144,8 +147,8 @@
 		4FA72FAA189A325E00AFD8B3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4FA72FA9189A325E00AFD8B3 /* Chime Project Indexer.app */,
-				4FA72FCA189A325E00AFD8B3 /* Chime Project Indexer Tests.xctest */,
+				4FA72FA9189A325E00AFD8B3 /* ShimmyShimmy.app */,
+				4FA72FCA189A325E00AFD8B3 /* ShimmyShimmy.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -251,9 +254,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4FA72FA8189A325E00AFD8B3 /* Chime Project Indexer */ = {
+		4FA72FA8189A325E00AFD8B3 /* ShimmyShimmy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4FA72FDA189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "Chime Project Indexer" */;
+			buildConfigurationList = 4FA72FDA189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "ShimmyShimmy" */;
 			buildPhases = (
 				4FA72FA5189A325E00AFD8B3 /* Sources */,
 				4FA72FA6189A325E00AFD8B3 /* Frameworks */,
@@ -265,14 +268,14 @@
 			dependencies = (
 				5DF9F49A1B60D0CF00F767FE /* PBXTargetDependency */,
 			);
-			name = "Chime Project Indexer";
+			name = ShimmyShimmy;
 			productName = ChimeTester;
-			productReference = 4FA72FA9189A325E00AFD8B3 /* Chime Project Indexer.app */;
+			productReference = 4FA72FA9189A325E00AFD8B3 /* ShimmyShimmy.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4FA72FC9189A325E00AFD8B3 /* Chime Project Indexer Tests */ = {
+		4FA72FC9189A325E00AFD8B3 /* ShimmyShimmy Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4FA72FDD189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "Chime Project Indexer Tests" */;
+			buildConfigurationList = 4FA72FDD189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "ShimmyShimmy Tests" */;
 			buildPhases = (
 				4FA72FC6189A325E00AFD8B3 /* Sources */,
 				4FA72FC7189A325E00AFD8B3 /* Frameworks */,
@@ -283,9 +286,9 @@
 			dependencies = (
 				4FA72FCF189A325E00AFD8B3 /* PBXTargetDependency */,
 			);
-			name = "Chime Project Indexer Tests";
+			name = "ShimmyShimmy Tests";
 			productName = ChimeTesterTests;
-			productReference = 4FA72FCA189A325E00AFD8B3 /* Chime Project Indexer Tests.xctest */;
+			productReference = 4FA72FCA189A325E00AFD8B3 /* ShimmyShimmy.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -302,7 +305,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4FA72FA4189A325E00AFD8B3 /* Build configuration list for PBXProject "Chime Project Indexer" */;
+			buildConfigurationList = 4FA72FA4189A325E00AFD8B3 /* Build configuration list for PBXProject "ShimmyShimmy" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -321,8 +324,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				4FA72FA8189A325E00AFD8B3 /* Chime Project Indexer */,
-				4FA72FC9189A325E00AFD8B3 /* Chime Project Indexer Tests */,
+				4FA72FA8189A325E00AFD8B3 /* ShimmyShimmy */,
+				4FA72FC9189A325E00AFD8B3 /* ShimmyShimmy Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -349,6 +352,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DF516721B71C9AE00C24B9B /* swift-og.icns in Resources */,
 				4FA72FE7189A34F400AFD8B3 /* InfoPlist.strings in Resources */,
 				5D21236E1B65B38E00DC5B7A /* LICENSE.txt in Resources */,
 				4FA72FEC189A352400AFD8B3 /* Images.xcassets in Resources */,
@@ -396,7 +400,7 @@
 /* Begin PBXTargetDependency section */
 		4FA72FCF189A325E00AFD8B3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 4FA72FA8189A325E00AFD8B3 /* Chime Project Indexer */;
+			target = 4FA72FA8189A325E00AFD8B3 /* ShimmyShimmy */;
 			targetProxy = 4FA72FCE189A325E00AFD8B3 /* PBXContainerItemProxy */;
 		};
 		5DF9F49A1B60D0CF00F767FE /* PBXTargetDependency */ = {
@@ -535,7 +539,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.objc2swift.app;
+				PRODUCT_NAME = ShimmyShimmy;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -549,7 +554,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.objc2swift.app;
+				PRODUCT_NAME = ShimmyShimmy;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -570,7 +576,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Chime Project Indexer Tests/Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ShimmyShimmy;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -588,7 +594,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				INFOPLIST_FILE = "Chime Project Indexer Tests/Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ShimmyShimmy;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -597,7 +603,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4FA72FA4189A325E00AFD8B3 /* Build configuration list for PBXProject "Chime Project Indexer" */ = {
+		4FA72FA4189A325E00AFD8B3 /* Build configuration list for PBXProject "ShimmyShimmy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4FA72FD8189A325E00AFD8B3 /* Debug */,
@@ -606,7 +612,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4FA72FDA189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "Chime Project Indexer" */ = {
+		4FA72FDA189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "ShimmyShimmy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4FA72FDB189A325E00AFD8B3 /* Debug */,
@@ -615,7 +621,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4FA72FDD189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "Chime Project Indexer Tests" */ = {
+		4FA72FDD189A325E00AFD8B3 /* Build configuration list for PBXNativeTarget "ShimmyShimmy Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4FA72FDE189A325E00AFD8B3 /* Debug */,

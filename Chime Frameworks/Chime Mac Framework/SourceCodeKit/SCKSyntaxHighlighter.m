@@ -685,10 +685,10 @@ static NSMutableDictionary *varsForHeader;
         return @"String";
     }
     if ([type containsString:@"id"]) {
-        return @"[AnyObject]";
+        return @"AnyObject";
     }
     if ([type containsString:@"instancetype"]) {
-        return @"[AnyObject]";
+        return @"AnyObject";
     }
     
     if ([type containsString:@"void"]) {

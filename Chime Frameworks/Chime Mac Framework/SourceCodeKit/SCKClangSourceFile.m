@@ -491,7 +491,7 @@ static NSString *classNameFromCategory(CXCursor category)
     
 	if (clang_equalLocations(clang_getRangeStart(r), clang_getRangeEnd(r)))
 	{
-		NSLog(@"Range has no length!");
+		//NSLog(@"Range has no length!");
 		return;
 	}
     

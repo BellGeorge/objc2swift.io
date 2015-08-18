@@ -80,7 +80,7 @@ static NSMutableDictionary *varsForHeader;
 // We need to keep around the entire source file with all NSMutableAttributedString row /lines in tact
 // to  manipulate the highlighted content and not lose any introspected data as the highlight syntax is a one shot process.
 // it's safer to hide the rows than to delete content or alter ranges.
-//
+// We're using this to parse the source file
 - (NSMutableArray *)lines {
     NSMutableArray *arr1;
     static NSMutableDictionary *d0 = nil;
@@ -95,7 +95,7 @@ static NSMutableDictionary *varsForHeader;
     else {
         if ([lastAttribute isEqualToString:self.string]) {
             arr1 = [d0 valueForKey:self.string];
-            NSLog(@"line count:%d", (int)arr1.count);
+            //NSLog(@"line count:%d", (int)arr1.count);
             return arr1;
         }
         else {
@@ -121,7 +121,7 @@ static NSMutableDictionary *varsForHeader;
         index = NSMaxRange(range);
     }
     
-    NSLog(@"line count:%d", (int)arr1.count);
+    //NSLog(@"line count:%d", (int)arr1.count);
     return arr1;
 }
 
@@ -1266,12 +1266,15 @@ static NSMutableDictionary *varsForHeader;
     }
 }
 
-- (NSString *)detectNsEnums:(SCKClangSourceFile *)file{
+- (NSMutableArray *)detectNsEnums:(SCKClangSourceFile *)file{
     filename = file.fileName;
     
     NSMutableAttributedString *source = file.source;
     
-    currentLineOffset = -1;
+    NSMutableArray *translations = [[NSMutableArray alloc]init];
+    
+    __block NSMutableString *enumType = [NSMutableString string];
+    __block BOOL shouldDetect = NO;
     
     [source.lines enumerateObjectsUsingBlock: ^(NSMutableDictionary *d0, NSUInteger idx, BOOL *stop0) {
         NSMutableAttributedString *line = d0[kAttributeString];
@@ -1279,20 +1282,50 @@ static NSMutableDictionary *varsForHeader;
      
         NSArray *arr = [line.string componentsSeparatedByString:@"NS_ENUM(NSInteger,"]; //typedef NS_ENUM(NSInteger, UIViewAnimationCurve)
         if (arr.count > 1) {
-            NSMutableString *enumType = ((NSString*)arr[1]).mutableCopy;
-            [enumType replaceOccurrencesOfString:@")" withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
+             enumType = ((NSString*)arr[1]).mutableCopy;
+             [enumType replaceOccurrencesOfString:@")" withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
             [enumType replaceOccurrencesOfString:@"{" withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
+            [enumType replaceOccurrencesOfString:@"\n" withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
+            [enumType replaceOccurrencesOfString:@"\r" withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
             [enumType stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            NSLog(@"enumType:%@:",enumType);
+            [enumType replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
+            //NSLog(@"enumType detected:%@",enumType);
+            shouldDetect = YES;
+        }
+        
+        if ([line.string containsString:@"}"]) {
+            shouldDetect = NO;
+        }
+        
+//        typedef NS_ENUM(NSInteger, UIViewAnimationCurve) {
+//            UIViewAnimationCurveEaseInOut,         // slow at beginning and end
+//            UIViewAnimationCurveEaseIn,            // slow at beginning
+//            UIViewAnimationCurveEaseOut,           // slow at end
+//            UIViewAnimationCurveLinear
+//        };
+        
+        if (shouldDetect) {
+        
+            
+            NSString *regex = [NSString stringWithFormat:@"%@\\w+",enumType];
+            
+            Rx* rx = [[Rx alloc] initWithPattern:regex];
+            NSArray *arr = [rx  matches:line.string];
+            
+            [arr enumerateObjectsUsingBlock:^(NSString *match, NSUInteger idx, BOOL * _Nonnull stop) {
+               // NSLog(@"word:%@",match);
+                NSMutableString *mStr =match.mutableCopy;
+                [mStr replaceOccurrencesOfString:enumType withString:@"" options:0 range:NSMakeRange(0, mStr.length)];
+               // NSLog(@"swift:%@",mStr);
+                
+                NSDictionary *d0 = [NSDictionary dictionaryWithObjectsAndKeys:mStr,match, nil];
+                [translations addObject:d0];
+            }];
         }
        
     }];
     
 
-    source = source.cookedAttributeText; // using the category helper - we have preserved original source - but ripped out some text. It's been cooked.
-    
-    NSString *src = source.string;
-    //NSLog(@"src:%@", src);
-    return src;
+    return translations;
 }
 @end

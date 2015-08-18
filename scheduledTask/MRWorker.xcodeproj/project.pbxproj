@@ -39,6 +39,8 @@
 		5D60B7831B8301560055EDBE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D60B7821B8301560055EDBE /* main.m */; };
 		5D60B7881B8303780055EDBE /* Chime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D60B7741B82F8F90055EDBE /* Chime.framework */; };
 		5D60B7891B83037C0055EDBE /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 190BF7D01843DC9900E133F6 /* Cocoa.framework */; };
+		5D60B78B1B830AED0055EDBE /* HarvesterReadme.md in Sources */ = {isa = PBXBuildFile; fileRef = 5D60B78A1B830AED0055EDBE /* HarvesterReadme.md */; };
+		5D60B78D1B830B390055EDBE /* headers.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5D60B78C1B830B120055EDBE /* headers.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,9 +82,10 @@
 		5D60B77E1B8301550055EDBE /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				5D60B78D1B830B390055EDBE /* headers.txt in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -150,6 +153,8 @@
 		5D60B76D1B82F8F90055EDBE /* Chime Mac Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Chime Mac Framework.xcodeproj"; path = "../Chime Frameworks/Chime Mac Framework/Chime Mac Framework.xcodeproj"; sourceTree = "<group>"; };
 		5D60B7801B8301550055EDBE /* EnumHarvester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EnumHarvester; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D60B7821B8301560055EDBE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5D60B78A1B830AED0055EDBE /* HarvesterReadme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = HarvesterReadme.md; path = ../HarvesterReadme.md; sourceTree = "<group>"; };
+		5D60B78C1B830B120055EDBE /* headers.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = headers.txt; sourceTree = SOURCE_ROOT; };
 		626682BA755240D5A495D734 /* libPods-MRWorkerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MRWorkerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B783CDAB3466597CF3A53AC /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		70B6104A6D29ECEBF8EC5F55 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -363,6 +368,8 @@
 		5D60B7811B8301560055EDBE /* EnumHarvester */ = {
 			isa = PBXGroup;
 			children = (
+				5D60B78C1B830B120055EDBE /* headers.txt */,
+				5D60B78A1B830AED0055EDBE /* HarvesterReadme.md */,
 				5D60B7821B8301560055EDBE /* main.m */,
 			);
 			path = EnumHarvester;
@@ -546,6 +553,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D60B7831B8301560055EDBE /* main.m in Sources */,
+				5D60B78B1B830AED0055EDBE /* HarvesterReadme.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,6 +792,7 @@
 				5D60B7861B8301560055EDBE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

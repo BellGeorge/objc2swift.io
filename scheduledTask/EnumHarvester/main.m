@@ -25,51 +25,80 @@ int main(int argc, const char * argv[]) {
         } else {
             NSURL *fileURL;
             
-            NSString *filePath = [NSString stringWithUTF8String:argv[1]];
-            NSLog(@"filePath:%@",filePath);
-            if (filePath != nil) {
-                fileURL = [NSURL fileURLWithPath:filePath];
-            }
+            NSMutableArray *totalTranslations = [[NSMutableArray alloc]init];
+            NSString* path = @"/Users/johnpope/Documents/gitWorkspace/objc2swift.io/scheduledTask/headers.txt";
+           
+            NSMutableString *headerURL = [[NSMutableString alloc]
+                                                    initWithContentsOfURL: [NSURL fileURLWithPath:path]
+                                                    encoding:NSUTF8StringEncoding
+                                                    error:nil];
+            NSMutableAttributedString *headers = [[NSMutableAttributedString alloc]initWithString:headerURL];
             
-            if (fileURL == nil) {
-                fprintf(stderr, "Error: file path \"%s\" does not appear to be valid.\n", argv[1]);
-                
-                return 1;
-            } else {
-                
-                SCKClangSourceFile *headerfile = [[SCKClangSourceFile alloc]init];
-                SCKSyntaxHighlighter *highlighter = [[SCKSyntaxHighlighter alloc]init];
-                
-                
-                NSError *error;
-                NSMutableString *stringFromFileAtURL = [[NSMutableString alloc]
-                                                        initWithContentsOfURL:fileURL
-                                                        encoding:NSUTF8StringEncoding
-                                                        error:&error];
-                if (stringFromFileAtURL) {
-                    NSMutableAttributedString *source = [[NSMutableAttributedString alloc]initWithString:stringFromFileAtURL];
-                    headerfile.source = source;
-                    [headerfile reparse];
-                    [headerfile syntaxHighlightFile];
+            
+            //NSLog(@"headers:%@",headers);
+            // break apart the array of lines
+            NSUInteger numberOfLines, index, stringLength = [headers.string length];
+            
+            for (index = 0, numberOfLines = 0; index < stringLength; numberOfLines++) {
+                NSRange range = [headers.string lineRangeForRange:NSMakeRange(index, 0)];
+                NSMutableAttributedString *filePath = [[NSMutableAttributedString alloc]init];
+                [filePath setAttributedString:[headers attributedSubstringFromRange:range]];
+                //NSLog(@"header:%@",filePath);
+                 index = NSMaxRange(range);
+            
+                NSMutableString *fp = [filePath.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].mutableCopy;
+             
+                if (filePath != nil) {
+                    fileURL = [NSURL fileURLWithPath:fp];
                 }
                 
-                
-                
-                
-                @try {
-                    [highlighter detectNsEnums:headerfile]; // headerfile includes a static dictionary with ivars for each interface
+                if (fileURL == nil) {
+                    fprintf(stderr, "Error: file path \"%s\" does not appear to be valid.\n", argv[1]);
+                    
+                    return 1;
+                } else {
+                    
+                    SCKClangSourceFile *headerfile = [[SCKClangSourceFile alloc]init];
+                    SCKSyntaxHighlighter *highlighter = [[SCKSyntaxHighlighter alloc]init];
+                    
+                    
+                    NSError *error;
+                    NSMutableString *stringFromFileAtURL = [[NSMutableString alloc]
+                                                            initWithContentsOfURL:fileURL
+                                                            encoding:NSUTF8StringEncoding
+                                                            error:&error];
+                    if (stringFromFileAtURL) {
+                        NSMutableAttributedString *source = [[NSMutableAttributedString alloc]initWithString:stringFromFileAtURL];
+                        headerfile.source = source;
+                        [headerfile reparse];
+                        [headerfile syntaxHighlightFile];
+                        @try {
+                            NSMutableArray *translations = [highlighter detectNsEnums:headerfile]; // headerfile includes a static dictionary with ivars for each interface
+                            if (translations.count) {
+                                [totalTranslations addObjectsFromArray:translations];
+                            }
+                            //
+                        }
+                        @catch (NSException *exception)
+                        {
+                            NSLog(@"exception:%@", exception);
+                        }
+                        @finally
+                        {
+                        }
+                        
+                    }else{
+                        NSLog(@"error:%@",error);
+                    }
+                    
                 }
-                @catch (NSException *exception)
-                {
-                    NSLog(@"exception:%@", exception);
-                }
-                @finally
-                {
-                }
-                
             }
+            //NSLog(@"totalTranslations:%@",totalTranslations);
+            [totalTranslations writeToFile:@"/Users/johnpope/Documents/gitWorkspace/objc2swift.io/scheduledTask/translations.plist" atomically:YES];
         }
+        
+      
     }
     return 0;
-    return 0;
+
 }

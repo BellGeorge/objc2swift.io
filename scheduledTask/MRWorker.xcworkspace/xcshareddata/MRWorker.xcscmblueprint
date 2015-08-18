@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "C7812D767D0107F6924436729ECD8387A45413FE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "134D5F03-ACB2-4FAF-B438-0B608CC5E06F" : 0,
+    "C7812D767D0107F6924436729ECD8387A45413FE" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "59FA989B-E1A9-481A-8876-76FC0BB7F278",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "134D5F03-ACB2-4FAF-B438-0B608CC5E06F" : "MRWorker",
+    "C7812D767D0107F6924436729ECD8387A45413FE" : "DEKMRWorker\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MRWorker",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MRWorker.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/github.com\/marcransome\/MRWorker.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "134D5F03-ACB2-4FAF-B438-0B608CC5E06F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:johndpope\/MRWorker.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C7812D767D0107F6924436729ECD8387A45413FE"
+    }
+  ]
+}

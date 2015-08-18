@@ -37,6 +37,7 @@
 - (void)buildInterfaceSwiftVarsForHeaderFile:(SCKClangSourceFile *)file;
 
 - (NSString *)convertToSwiftSource:(SCKClangSourceFile *)file sourceCollection:(SCKSourceCollection *)sourceCollection isHeader:(BOOL)bHeader;
+- (NSString *)detectNsEnums:(SCKClangSourceFile *)file;
 
 
 @end

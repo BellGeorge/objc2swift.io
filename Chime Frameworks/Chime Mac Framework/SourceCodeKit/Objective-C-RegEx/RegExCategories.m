@@ -150,6 +150,7 @@
 
 - (NSArray*) matches:(NSString*)str
 {
+    
     NSMutableArray* matches = [NSMutableArray array];
     
     NSArray* results = [self matchesInString:str options:0 range:NSMakeRange(0, str.length)];

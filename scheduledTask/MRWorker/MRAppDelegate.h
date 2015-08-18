@@ -24,6 +24,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "UAGithubEngine.h"
 
 @interface MRAppDelegate : NSObject <NSApplicationDelegate>
 

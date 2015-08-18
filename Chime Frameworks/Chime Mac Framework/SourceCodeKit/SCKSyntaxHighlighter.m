@@ -1266,4 +1266,33 @@ static NSMutableDictionary *varsForHeader;
     }
 }
 
+- (NSString *)detectNsEnums:(SCKClangSourceFile *)file{
+    filename = file.fileName;
+    
+    NSMutableAttributedString *source = file.source;
+    
+    currentLineOffset = -1;
+    
+    [source.lines enumerateObjectsUsingBlock: ^(NSMutableDictionary *d0, NSUInteger idx, BOOL *stop0) {
+        NSMutableAttributedString *line = d0[kAttributeString];
+       // NSLog(@"line.string:%@:",line.string);
+     
+        NSArray *arr = [line.string componentsSeparatedByString:@"NS_ENUM(NSInteger,"]; //typedef NS_ENUM(NSInteger, UIViewAnimationCurve)
+        if (arr.count > 1) {
+            NSMutableString *enumType = ((NSString*)arr[1]).mutableCopy;
+            [enumType replaceOccurrencesOfString:@")" withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
+            [enumType replaceOccurrencesOfString:@"{" withString:@"" options:0 range:NSMakeRange(0, enumType.length)];
+            [enumType stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            NSLog(@"enumType:%@:",enumType);
+        }
+       
+    }];
+    
+
+    source = source.cookedAttributeText; // using the category helper - we have preserved original source - but ripped out some text. It's been cooked.
+    
+    NSString *src = source.string;
+    //NSLog(@"src:%@", src);
+    return src;
+}
 @end

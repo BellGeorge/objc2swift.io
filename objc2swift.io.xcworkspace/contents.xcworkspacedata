@@ -7,7 +7,4 @@
    <FileRef
       location = "group:Chime Frameworks/Chime Mac Framework/Chime Mac Framework.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Chime Test Apps/chimesimpletester/chimesimpletester.xcodeproj">
-   </FileRef>
 </Workspace>

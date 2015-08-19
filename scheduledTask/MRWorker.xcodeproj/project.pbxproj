@@ -17,6 +17,7 @@
 		190BF8061843DD4700E133F6 /* MRWorkerOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 190BF8051843DD4700E133F6 /* MRWorkerOperation.m */; };
 		190BF80A1843DF1200E133F6 /* MRWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 190BF8091843DF1200E133F6 /* MRWorker.m */; };
 		25258FB0254493FCBD5F7A70 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70B6104A6D29ECEBF8EC5F55 /* libPods.a */; };
+		5D233D181B841410000D7E49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D233D171B841410000D7E49 /* main.m */; };
 		5D54E6771B815F3300D1DFB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D54E65E1B815F3300D1DFB3 /* InfoPlist.strings */; };
 		5D54E6781B815F3300D1DFB3 /* NSArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D54E6611B815F3300D1DFB3 /* NSArray+Utilities.m */; };
 		5D54E6791B815F3300D1DFB3 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D54E6631B815F3300D1DFB3 /* NSData+Base64.m */; };
@@ -68,6 +69,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		5D233D131B841410000D7E49 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		5D54E6AC1B81C6D700D1DFB3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +125,8 @@
 		190BF8081843DF1200E133F6 /* MRWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRWorker.h; sourceTree = "<group>"; };
 		190BF8091843DF1200E133F6 /* MRWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRWorker.m; sourceTree = "<group>"; };
 		573D46625BD0DB14569F78E9 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		5D233D151B841410000D7E49 /* trawler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = trawler; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D233D171B841410000D7E49 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5D54E65F1B815F3300D1DFB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5D54E6601B815F3300D1DFB3 /* NSArray+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Utilities.h"; sourceTree = "<group>"; };
 		5D54E6611B815F3300D1DFB3 /* NSArray+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Utilities.m"; sourceTree = "<group>"; };
@@ -175,6 +187,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5D233D121B841410000D7E49 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5D60B77D1B8301550055EDBE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -203,6 +222,7 @@
 			children = (
 				5D60B76D1B82F8F90055EDBE /* Chime Mac Framework.xcodeproj */,
 				5D60B7811B8301560055EDBE /* EnumHarvester */,
+				5D233D161B841410000D7E49 /* trawler */,
 				5D54E69F1B81C67300D1DFB3 /* Frameworks */,
 				5D54E65C1B815F3300D1DFB3 /* External */,
 				190BF7D61843DC9900E133F6 /* MRWorker */,
@@ -219,6 +239,7 @@
 			children = (
 				190BF7CD1843DC9900E133F6 /* MRWorker.app */,
 				5D60B7801B8301550055EDBE /* EnumHarvester */,
+				5D233D151B841410000D7E49 /* trawler */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -292,6 +313,14 @@
 				190BF7F71843DC9900E133F6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5D233D161B841410000D7E49 /* trawler */ = {
+			isa = PBXGroup;
+			children = (
+				5D233D171B841410000D7E49 /* main.m */,
+			);
+			path = trawler;
 			sourceTree = "<group>";
 		};
 		5D54E65C1B815F3300D1DFB3 /* External */ = {
@@ -399,6 +428,23 @@
 			productReference = 190BF7CD1843DC9900E133F6 /* MRWorker.app */;
 			productType = "com.apple.product-type.application";
 		};
+		5D233D141B841410000D7E49 /* trawler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5D233D1D1B841410000D7E49 /* Build configuration list for PBXNativeTarget "trawler" */;
+			buildPhases = (
+				5D233D111B841410000D7E49 /* Sources */,
+				5D233D121B841410000D7E49 /* Frameworks */,
+				5D233D131B841410000D7E49 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = trawler;
+			productName = trawler;
+			productReference = 5D233D151B841410000D7E49 /* trawler */;
+			productType = "com.apple.product-type.tool";
+		};
 		5D60B77F1B8301550055EDBE /* EnumHarvester */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5D60B7841B8301560055EDBE /* Build configuration list for PBXNativeTarget "EnumHarvester" */;
@@ -426,6 +472,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Marc Ransome";
 				TargetAttributes = {
+					5D233D141B841410000D7E49 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 					5D60B77F1B8301550055EDBE = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -452,6 +501,7 @@
 			targets = (
 				190BF7CC1843DC9900E133F6 /* MRWorker */,
 				5D60B77F1B8301550055EDBE /* EnumHarvester */,
+				5D233D141B841410000D7E49 /* trawler */,
 			);
 		};
 /* End PBXProject section */
@@ -545,6 +595,14 @@
 				5D54E67A1B815F3300D1DFB3 /* NSInvocation+Blocks.m in Sources */,
 				5D54E6791B815F3300D1DFB3 /* NSData+Base64.m in Sources */,
 				5D54E67B1B815F3300D1DFB3 /* NSString+UAGithubEngineUtilities.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5D233D111B841410000D7E49 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D233D181B841410000D7E49 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -729,6 +787,37 @@
 			};
 			name = Release;
 		};
+		5D233D191B841410000D7E49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5D233D1A1B841410000D7E49 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		5D60B7851B8301560055EDBE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -784,6 +873,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		5D233D1D1B841410000D7E49 /* Build configuration list for PBXNativeTarget "trawler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5D233D191B841410000D7E49 /* Debug */,
+				5D233D1A1B841410000D7E49 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		5D60B7841B8301560055EDBE /* Build configuration list for PBXNativeTarget "EnumHarvester" */ = {
 			isa = XCConfigurationList;

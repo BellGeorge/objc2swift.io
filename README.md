@@ -1,5 +1,31 @@
-ShimmyShimmy
+objc2swift.io
 ===================================
+
+This is a hack - need to investigate using Sourcekit
+http://www.jpsim.com/uncovering-sourcekit/
+possibly entire code base is a bin job.
+
+
+For now - the translation requires user to specify workspace / project inside Chime project
+this uses the clang parser.
+
+I will simplify this so a single header / implementation file can be specified to help automate batch processing.
+
+scheduledTask / MRWorker
+ schema > trawler - IN PROGRESS.
+
+
+TODO / Task Tracker
+https://docs.google.com/spreadsheets/d/1gUvHCqdPyH-yAt5W_2pmDOVsgBVtAzqfeMnoTJRTgFQ/edit#gid=738774835
+
+
+
+
+
+
+
+
+
 
 
 Intention of project

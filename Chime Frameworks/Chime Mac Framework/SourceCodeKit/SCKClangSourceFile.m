@@ -521,7 +521,9 @@ static NSString *classNameFromCategory(CXCursor category)
 				}
 			}
             
-            BOOL shouldSkip = NO;
+//            // EP: Dead code
+//            BOOL shouldSkip = NO;
+            
 			if (highightSyntax)
 			{
 				id type;

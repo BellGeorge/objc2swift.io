@@ -77,7 +77,7 @@
     self.translationUnit = clang_parseTranslationUnit(self.index.index,
                                                       [self.fileURL fileSystemRepresentation],
                                                       cArguments,
-                                                      [self.arguments count],
+                                                      (int)[self.arguments count],
                                                       NULL, // No unsaved files
                                                       0,
                                                       CXTranslationUnit_SkipFunctionBodies);

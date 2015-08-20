@@ -55,10 +55,8 @@
 		4FEC4425189F5DAA0030FF27 /* ChimeSymbol_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FEC4424189F5D540030FF27 /* ChimeSymbol_Private.h */; };
 		4FEC4428189F648C0030FF27 /* NSString+ChimeFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FEC4426189F648C0030FF27 /* NSString+ChimeFramework.h */; };
 		4FEC4429189F648C0030FF27 /* NSString+ChimeFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEC4427189F648C0030FF27 /* NSString+ChimeFramework.m */; };
-		5D2123531B60EBE500DC5B7A /* AB.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D21234D1B60EBE500DC5B7A /* AB.h */; };
 		5D2123561B60EBE500DC5B7A /* TestCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2123501B60EBE500DC5B7A /* TestCommon.h */; };
 		5D21235A1B60EC3F00DC5B7A /* TestCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123511B60EBE500DC5B7A /* TestCommon.m */; };
-		5D21235B1B60EC4400DC5B7A /* AB.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21234E1B60EBE500DC5B7A /* AB.m */; };
 		5D21235D1B60EE3000DC5B7A /* SKTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21235C1B60EE3000DC5B7A /* SKTest.m */; };
 		5D2123601B61CC3800DC5B7A /* DDFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21235F1B61CC3800DC5B7A /* DDFileReader.m */; };
 		5D2123621B61CE6D00DC5B7A /* DDFileReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2123611B61CC4600DC5B7A /* DDFileReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -432,7 +430,6 @@
 				4FBD3EA618A0B01E00FC0CEF /* ChimeClassExtension.h in Headers */,
 				4FEC4428189F648C0030FF27 /* NSString+ChimeFramework.h in Headers */,
 				4FA72F941899E13400AFD8B3 /* Index.h in Headers */,
-				5D2123531B60EBE500DC5B7A /* AB.h in Headers */,
 				4FA72F951899E13400AFD8B3 /* Platform.h in Headers */,
 				4FA72F931899E13400AFD8B3 /* CXString.h in Headers */,
 				4FA72F921899E13400AFD8B3 /* CXCompilationDatabase.h in Headers */,
@@ -587,7 +584,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D21235B1B60EC4400DC5B7A /* AB.m in Sources */,
 				5D21235D1B60EE3000DC5B7A /* SKTest.m in Sources */,
 				4FA72F7A1899D3BF00AFD8B3 /* ChimeTests.m in Sources */,
 				5D21235A1B60EC3F00DC5B7A /* TestCommon.m in Sources */,

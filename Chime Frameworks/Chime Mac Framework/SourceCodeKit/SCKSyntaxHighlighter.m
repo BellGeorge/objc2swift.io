@@ -34,7 +34,7 @@ static NSMutableDictionary *varsForHeader;
 - (NSMutableArray *)lines;
 //-(void)updateAttributeAtLine:(NSInteger)line attributeString:(NSMutableAttributedString*)attributeString;
 //-(void)removeRowAtIndex:(NSUInteger)rowIndex;
-- (NSMutableString *)replaceOccurrencesOfString:(NSString *)str0 withString:(NSString *)str1;
+//- (NSMutableString *)replaceOccurrencesOfString:(NSString *)str0 withString:(NSString *)str1;
 @property (nonatomic, strong) id associatedObject;
 @end
 

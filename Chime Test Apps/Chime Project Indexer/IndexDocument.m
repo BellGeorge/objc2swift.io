@@ -464,10 +464,10 @@ static NSMutableArray *argumentsFromSingleString(NSString *singleString) {
                         if(!useClangParser){
                             
                             //BEGIN Regex pattern matching  / ruby hack method in combitation with SourceCodeKit attributed string conversion
-                            SCKSourceFile *implementation = [sourceCollection sourceFileForPath: fileURL.path]; //.m files
-                            NSMutableString *headerFile = [NSMutableString stringWithFormat:@"%@",fileURL.path];
-                            [headerFile replaceOccurrencesOfString:@".m" withString:@".h" options:0 range:NSMakeRange(0, headerFile.length)];
-                            SCKSourceFile *hFile = [sourceCollection sourceFileForPath: headerFile]; //.h files - may not exist??
+//                            SCKSourceFile *implementation = [sourceCollection sourceFileForPath: fileURL.path]; //.m files
+//                            NSMutableString *headerFile = [NSMutableString stringWithFormat:@"%@",fileURL.path];
+//                            [headerFile replaceOccurrencesOfString:@".m" withString:@".h" options:0 range:NSMakeRange(0, headerFile.length)];
+//                            SCKSourceFile *hFile = [sourceCollection sourceFileForPath: headerFile]; //.h files - may not exist??
                             
                         }else{
                             

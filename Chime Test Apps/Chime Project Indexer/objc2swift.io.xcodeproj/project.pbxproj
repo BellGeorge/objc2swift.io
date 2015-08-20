@@ -23,8 +23,6 @@
 		4FA72FF1189A35A000AFD8B3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA72FF0189A35A000AFD8B3 /* main.m */; };
 		4FA72FF4189A35BA00AFD8B3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4FA72FF2189A35BA00AFD8B3 /* Credits.rtf */; };
 		4FD32104189CB42D00D59683 /* XcodebuildTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD32103189CB42D00D59683 /* XcodebuildTask.m */; };
-		5D21236E1B65B38E00DC5B7A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5D2123681B65B38E00DC5B7A /* LICENSE.txt */; };
-		5D21236F1B65B38E00DC5B7A /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123691B65B38E00DC5B7A /* readme.md */; };
 		5D2123701B65B38E00DC5B7A /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21236B1B65B38E00DC5B7A /* RegExCategories.m */; };
 		5DF9F49B1B60D0D900F767FE /* Chime.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5DF9F4961B60D0BA00F767FE /* Chime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -350,7 +348,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FA72FE7189A34F400AFD8B3 /* InfoPlist.strings in Resources */,
-				5D21236E1B65B38E00DC5B7A /* LICENSE.txt in Resources */,
 				4FA72FEC189A352400AFD8B3 /* Images.xcassets in Resources */,
 				4FA72FEA189A350B00AFD8B3 /* MainMenu.xib in Resources */,
 				4F4A6696189B03EF00695F64 /* IndexDocument.xib in Resources */,
@@ -378,7 +375,6 @@
 				5D2123701B65B38E00DC5B7A /* RegExCategories.m in Sources */,
 				4FD32104189CB42D00D59683 /* XcodebuildTask.m in Sources */,
 				4F4A6690189B039600695F64 /* IndexDocument.m in Sources */,
-				5D21236F1B65B38E00DC5B7A /* readme.md in Sources */,
 				4FA72FF1189A35A000AFD8B3 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -62,8 +62,6 @@
 		5D21235D1B60EE3000DC5B7A /* SKTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21235C1B60EE3000DC5B7A /* SKTest.m */; };
 		5D2123601B61CC3800DC5B7A /* DDFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D21235F1B61CC3800DC5B7A /* DDFileReader.m */; };
 		5D2123621B61CE6D00DC5B7A /* DDFileReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2123611B61CC4600DC5B7A /* DDFileReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5D2123781B65B43D00DC5B7A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5D2123741B65B43D00DC5B7A /* LICENSE.txt */; };
-		5D2123791B65B43D00DC5B7A /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123751B65B43D00DC5B7A /* readme.md */; };
 		5D21237A1B65B43D00DC5B7A /* RegExCategories.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2123761B65B43D00DC5B7A /* RegExCategories.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D21237B1B65B43D00DC5B7A /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2123771B65B43D00DC5B7A /* RegExCategories.m */; };
 		5DF9F4DB1B60E13300F767FE /* Readme in Resources */ = {isa = PBXBuildFile; fileRef = 5DF9F4DA1B60E13300F767FE /* Readme */; };
@@ -524,7 +522,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D2123781B65B43D00DC5B7A /* LICENSE.txt in Resources */,
 				5DF9F4DB1B60E13300F767FE /* Readme in Resources */,
 				5DF9F5081B60E64200F767FE /* SourceCodeKit-Info.plist in Resources */,
 				5DF9F4F71B60E64200F767FE /* InfoPlist.strings in Resources */,
@@ -576,7 +573,6 @@
 				4FBD3EA718A0B01E00FC0CEF /* ChimeClassExtension.m in Sources */,
 				5D2123601B61CC3800DC5B7A /* DDFileReader.m in Sources */,
 				5DF9F4FD1B60E64200F767FE /* SCKIntrospection.m in Sources */,
-				5D2123791B65B43D00DC5B7A /* readme.md in Sources */,
 				4FEC4429189F648C0030FF27 /* NSString+ChimeFramework.m in Sources */,
 				4FEC4423189F5CDF0030FF27 /* ChimeSymbol.m in Sources */,
 				4F4C6E5818A0710000452728 /* ChimeCategory.m in Sources */,

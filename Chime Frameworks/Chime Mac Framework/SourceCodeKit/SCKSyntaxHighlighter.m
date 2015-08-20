@@ -35,7 +35,7 @@ static NSMutableDictionary *varsForHeader;
 //-(void)updateAttributeAtLine:(NSInteger)line attributeString:(NSMutableAttributedString*)attributeString;
 //-(void)removeRowAtIndex:(NSUInteger)rowIndex;
 //- (NSMutableString *)replaceOccurrencesOfString:(NSString *)str0 withString:(NSString *)str1;
-@property (nonatomic, strong) id associatedObject;
+// @property (nonatomic, strong) id associatedObject;
 @end
 
 @implementation NSMutableAttributedString  (addons)
@@ -1316,7 +1316,11 @@ static NSMutableDictionary *varsForHeader;
             Rx* rx = [[Rx alloc] initWithPattern:regex];
             NSArray *arr = [rx  matches:line.string];
             
-            [arr enumerateObjectsUsingBlock:^(NSString *match, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            // Origional: _Nonnull is not defined by default on xcode 6.4, 7.0 feature.
+            // [arr enumerateObjectsUsingBlock:^(NSString *match, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            [arr enumerateObjectsUsingBlock:^(NSString *match, NSUInteger idx, BOOL *stop) {
                // NSLog(@"word:%@",match);
                 NSMutableString *mStr =match.mutableCopy;
                 [mStr replaceOccurrencesOfString:enumType withString:@"" options:0 range:NSMakeRange(0, mStr.length)];

@@ -590,7 +590,9 @@ static NSString *classNameFromCategory(CXCursor category)
 - (void)collectDiagnostics
 {
 	unsigned diagnosticCount = clang_getNumDiagnostics(translationUnit);
-	unsigned opts = clang_defaultDiagnosticDisplayOptions();
+    
+//    // EP: Dead code.
+//	unsigned opts = clang_defaultDiagnosticDisplayOptions();
     
 	for (unsigned i=0 ; i<diagnosticCount ; i++)
 	{

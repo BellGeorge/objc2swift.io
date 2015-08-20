@@ -591,10 +591,11 @@ static NSMutableDictionary *varsForHeader;
     }
     NSLog(@"mline:%@ currentInterface:%@",mLine,currentInterface);
     
-    BOOL hasOuterBracket = NO;
-    if ([mLine containsString:@"{"]) {
-        hasOuterBracket = YES;
-    }
+//    // EP: unused code block
+//    BOOL hasOuterBracket = NO;
+//    if ([mLine containsString:@"{"]) {
+//        hasOuterBracket = YES;
+//    }
     
     
     // look ahead and set the text to deleted so we can erase the {

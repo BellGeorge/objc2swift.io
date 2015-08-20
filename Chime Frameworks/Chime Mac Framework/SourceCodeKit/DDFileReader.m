@@ -55,7 +55,9 @@
 @implementation DDFileReader
 @synthesize lineDelimiter, chunkSize;
 
-
+-(void)createSwiftFile {
+    // TODO: Stubbed out to fix warning.  Required ?
+}
 
 - (id)initWithFilePath:(NSString *)aPath {
     if (self = [super init]) {

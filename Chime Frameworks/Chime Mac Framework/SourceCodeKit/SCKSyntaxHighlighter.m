@@ -139,6 +139,10 @@ static NSMutableDictionary *varsForHeader;
     });
 }
 
+- (void)transformString:(NSMutableAttributedString *)source {
+    // TODO: Stubbed method out to remove compiler warning.  Required ?
+}
+
 - (id)init {
     self = [super init];
     
